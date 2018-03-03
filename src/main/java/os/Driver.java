@@ -11,16 +11,19 @@ public class Driver {
     private final Cpu cpu;
     private final Disk disk;
     private final ProcessControlBlock processControlBlock;
+    private final Memory memory;
 
     private final Queue<Program> programQueue = new ArrayDeque<Program>();
 
     public Driver() {
-        this.scheduler = new Scheduler(programQueue);
         this.dispatcher = new Dispatcher(programQueue);
         this.cpu = new Cpu(programQueue);
         this.disk = new Disk();
         this.processControlBlock = new ProcessControlBlock();
         this.loader = new Loader(disk, processControlBlock);
+
+        this.memory = new Memory();
+        this.scheduler = new Scheduler(programQueue, disk, memory);
     }
 
     public void run() {

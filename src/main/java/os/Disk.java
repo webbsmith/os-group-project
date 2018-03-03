@@ -32,6 +32,7 @@ public class Disk{
             System.out.println("No more space in disk memory.");
         }
     }
+
     public String getWord(int x){
         return word[x];
     }
