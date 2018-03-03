@@ -9,17 +9,22 @@ public class Driver {
     private final Scheduler scheduler;
     private final Dispatcher dispatcher;
     private final Cpu cpu;
+    private final Disk disk;
+    private final ProcessControlBlock processControlBlock;
+
     private final Queue<Program> programQueue = new ArrayDeque<Program>();
 
     public Driver() {
-        this.loader = new Loader(programQueue);
         this.scheduler = new Scheduler(programQueue);
         this.dispatcher = new Dispatcher(programQueue);
         this.cpu = new Cpu(programQueue);
+        this.disk = new Disk();
+        this.processControlBlock = new ProcessControlBlock();
+        this.loader = new Loader(disk, processControlBlock);
     }
 
-    public run() {
-        loader.run(cpu);
+    public void run() {
+        loader.run();
         while (true) {
             scheduler.run();
             dispatcher.run();
