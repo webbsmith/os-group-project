@@ -4,19 +4,19 @@ import java.util.Queue;
 
 public class Scheduler implements Runnable {
 
-    private final Queue<Program> programQueue;
+    private final ProgramQueues programQueues;
     private final Disk disk;
     private final Memory memory;
 
-    public Scheduler(Queue<Program> programQueue, Disk disk, Memory memory) {
-        this.programQueue = programQueue;
+    public Scheduler(ProgramQueues programQueues, Disk disk, Memory memory) {
+        this.programQueues = programQueues;
         this.disk = disk;
         this.memory = memory;
     }
 
     public void run() {
         // Load program from disk into RAM
-        disk.
+
         // Note in the PCB the start/finish RAM address
 
         // Store start address in the base-register (or program counter) of the job
@@ -31,13 +31,12 @@ public class Scheduler implements Runnable {
 
         // WORKS CLOSELY WITH MEMORY MANAGER AND EFFECTIVE ADDRESS METHOD TO LOAD JOBS INTO RAM
 
+        //idk, can be deleted
         while (true) {
             int programRunningCount = 0;
-            for (Program program : programQueue) {
-                if (program.state() == Program.STATE_RUNNING) {
-                    programRunningCount++;
-                }
-            }
+            Program program = programQueues.nextNew();
+                // idk
+
             if (programRunningCount > 0) {
 
             }

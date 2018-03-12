@@ -14,4 +14,8 @@ public class Dispatcher {
     public void assignCpuRegisters() {
         // copy parameter data from PCB to CPU, this preps the OS for calling the CPU
     }
+
+    public void run() {
+        //todo - loop
+    }
 }
