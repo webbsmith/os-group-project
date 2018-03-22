@@ -8,6 +8,7 @@ public class Driver {
     private final Disk disk;
     private final ProcessControlBlock pcb;
     private final Memory memory;
+    private final Fetcher fetcher;
 
     private final ProgramQueues programQueues = new ProgramQueues();
 
@@ -19,6 +20,7 @@ public class Driver {
         this.dispatcher = new Dispatcher(pcb, cpu);
         this.memory = new Memory();
         this.scheduler = new Scheduler(programQueues, disk, memory);
+        this.fetcher = new Fetcher(cpu, memory, null)
     }
 
     public void run() {
