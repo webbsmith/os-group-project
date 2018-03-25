@@ -5,22 +5,17 @@ public class Driver {
     private final Scheduler scheduler;
     private final Dispatcher dispatcher;
     private final Cpu cpu;
-    private final Disk disk;
-    private final ProcessControlBlock pcb;
-    private final Memory memory;
-    private final Fetcher fetcher;
-
-    private final ProgramQueues programQueues = new ProgramQueues();
 
     public Driver() {
-        this.cpu = new Cpu(programQueues, new CpuDmaController());
-        this.disk = new Disk();
-        this.pcb = new ProcessControlBlock();
+        Memory memory = new Memory();
+        ProgramQueues programQueues = new ProgramQueues();
+        Fetcher fetcher = new Fetcher(memory, new Decoder());
+        this.cpu = new Cpu(programQueues, new CpuDmaController(), fetcher);
+        Disk disk = new Disk();
+        ProcessControlBlock pcb = new ProcessControlBlock();
         this.loader = new Loader(disk, pcb);
         this.dispatcher = new Dispatcher(pcb, cpu);
-        this.memory = new Memory();
         this.scheduler = new Scheduler(disk, 0, memory, pcb);
-        this.fetcher = new Fetcher(cpu, memory, null);
     }
 
     public void run() {
