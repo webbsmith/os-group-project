@@ -21,7 +21,7 @@ public class Driver {
         ProcessControlBlock pcb = new ProcessControlBlock();
         this.loader = new Loader(disk, pcb);
         this.dispatcher = new Dispatcher(pcb, cpu);
-        this.scheduler = new Scheduler(disk, 0, memory, pcb);
+        this.scheduler = new Scheduler(disk, 1, memory, pcb);
     }
 
     public void run() {
@@ -40,7 +40,7 @@ public class Driver {
 
     private void waitForInterrupt() {
         try {
-            Thread.sleep(60000); // 10 seconds
+            Thread.sleep(10_000); // 10 seconds
         } catch (InterruptedException e) {
             System.out.println("Received interrupt");
             System.exit(2);

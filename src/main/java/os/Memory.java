@@ -15,11 +15,16 @@ package os;
    Returns the current value of the counter representing the next memory position to be written to.
 */
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Memory{
+    private static final Logger log = LoggerFactory.getLogger(Memory.class);
     public String[] word = new String[1024];
     public int counter = 0;
 
     public void newWord(String newword){
+        log.debug("new word: {}; counter value: {}", newword, counter);
         if (counter >= 1024){
             counter = 0;
             word[counter] = newword;

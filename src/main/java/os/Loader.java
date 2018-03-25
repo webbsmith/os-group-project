@@ -59,13 +59,13 @@ public class Loader {
                         DataCard = line.split(" ", 5);
                         processControlBlock.newJob(CCInfo[2], CCInfo[3], CCInfo[4], DataCard[2], DataCard[3], DataCard[4]);
                     } else {
-                        log.debug("{} >> no action taken", line);
+                        log.trace("{} >> no action taken", line);
                     }
 
                 } else {
                     //Line is not a control card, must be sent to disk object
 
-                    log.debug("{} >> sending to Disk", line);
+                    log.trace("{} >> sending to Disk", line);
                     disk.newWord(line);
                 }
             }

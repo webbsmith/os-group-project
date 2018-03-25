@@ -46,7 +46,7 @@ public class ProcessControlBlock {
     private int[] jobOutputBufferLocation = new int[100];
 
     public void newJob(String jobNum, String length, String priority, String inputb, String outputb, String tempb){
-        log.trace("newJob(jobNum={}, length={}, priority={}, inputb={}, outputb={}, tempb={})", jobNum, length, priority, inputb, outputb, tempb);
+        log.info("newJob(jobNum={}, length={}, priority={}, inputb={}, outputb={}, tempb={})", jobNum, length, priority, inputb, outputb, tempb);
         int jobNumber = Integer.parseInt(jobNum, 16) - 1;
         jobLength[jobNumber] = Integer.parseInt(length, 16);
         jobPriority[jobNumber] = Integer.parseInt(priority, 16);

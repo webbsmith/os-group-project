@@ -21,7 +21,7 @@ public class Cpu {
     }
 
     public void read(int memoryAddressOfPhysicalData, int memoryAddressOfBuffer) {
-        log.trace("read(memoryAddressOfPhysicalData={}, memoryAddressOfBuffer={})", memoryAddressOfPhysicalData, memoryAddressOfBuffer);
+        log.debug("read(memoryAddressOfPhysicalData={}, memoryAddressOfBuffer={})", memoryAddressOfPhysicalData, memoryAddressOfBuffer);
         while (!busControl) {
             // busy wait
         }
@@ -31,7 +31,7 @@ public class Cpu {
     }
 
     public void write(int memoryAddressOfPhysicalData, int memoryAddressOfBuffer) {
-        log.trace("write(memoryAddressOfPhysicalData={}, memoryAddressOfBuffer={})", memoryAddressOfPhysicalData, memoryAddressOfBuffer);
+        log.debug("write(memoryAddressOfPhysicalData={}, memoryAddressOfBuffer={})", memoryAddressOfPhysicalData, memoryAddressOfBuffer);
         while (!busControl) {
             // busy wait
         }
@@ -41,7 +41,7 @@ public class Cpu {
     }
 
     public void run() {
-        log.trace("run()");
+        log.debug("run()");
         //todo
     }
 }
