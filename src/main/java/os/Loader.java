@@ -5,10 +5,16 @@ package os;
    Postcondition: The 'Program-File.txt' file will be parsed and the commands
    will be placed into disk memory. The control cards will be sent to the PCB object.
 */
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.util.Scanner;
 
 public class Loader {
+
+    private static final Logger log = LoggerFactory.getLogger(Loader.class);
 
     public Loader(Disk disk, ProcessControlBlock processControlBlock) {
         this.disk = disk;
@@ -18,37 +24,52 @@ public class Loader {
     private final Disk disk;
     private final ProcessControlBlock processControlBlock;
 
-    public void run() {
-        String Line;
+    public void run(String fileName) {
+        log.info("Reading input file {}", fileName);
+
+        String line;
         String controlCard = "";
         String[] CCInfo;
         String[] DataCard;
 
         try {
-            File file = new File("Project-File.txt");
+            File file = new File(getFileFromResourcesFolder(fileName));
             Scanner scan = new Scanner(file);
 
             //Scan each line. If the line is a control card, send info to PCB,
             //else load line into Disk object.
             while (scan.hasNextLine()) {
-                Line = scan.nextLine();
+                line = scan.nextLine();
+                if (line.startsWith("//")) {
+                    String lineType = line.split(" ")[1];
+                    if ("JOB".equalsIgnoreCase(lineType)) {
+                        //Line is a control card, info will be sent to the PCB along with the data card
+                        log.debug("{} >> setting control card", line);
+                        controlCard = line;
+                    } else if ("DATA".equalsIgnoreCase(lineType)) {
+                        //Line is a data card, info is sent to the PCB along with control card info
+                        log.debug("{} >> sending to PCB", line);
+                        CCInfo = controlCard.split(" ", 5);
+                        DataCard = line.split(" ", 5);
+                        processControlBlock.newJob(CCInfo[2], CCInfo[3], CCInfo[4], DataCard[2], DataCard[3], DataCard[4]);
+                    } else {
+                        log.debug("{} >> no action taken", line);
+                    }
 
-                if (Line.startsWith("// JOB")) {
-                    //Line is a control card, info will be sent to the PCB along with the data card
-                    controlCard = Line;
-                } else if (Line.startsWith("// DATA")) {
-                    //Line is a data card, info is sent to the PCB along with control card info
-                    CCInfo = controlCard.split(" ", 5);
-                    DataCard = Line.split(" ", 5);
-                    processControlBlock.newJob(CCInfo[2], CCInfo[3], CCInfo[4], DataCard[2], DataCard[3], DataCard[4]);
                 } else {
                     //Line is not a control card, must be sent to disk object
-                    disk.newWord(Line);
+
+                    log.debug("{} >> sending to Disk", line);
+                    disk.newWord(line);
                 }
             }
             scan.close();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error("Issue reading input file", ex);
         }
+    }
+
+    private String getFileFromResourcesFolder(String fileName) {
+        return getClass().getClassLoader().getResource(fileName).getFile();
     }
 }

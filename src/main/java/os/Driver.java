@@ -24,7 +24,7 @@ public class Driver {
     }
 
     public void run() {
-        loader.run();
+        loader.run("program-input.txt");
         while (true) {
             scheduler.run();
             dispatcher.run();
