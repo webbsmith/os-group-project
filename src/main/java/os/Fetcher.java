@@ -14,11 +14,13 @@ public class Fetcher
 {
     private final Memory memory;
     private final Decoder decoder;
+    private final EffectiveAddress effectiveAddress;
 
-    public Fetcher(Memory memory, Decoder decoder)
+    public Fetcher(Memory memory, Decoder decoder, EffectiveAddress effectiveAddress)
     {
         this.memory = memory;
         this.decoder = decoder;
+        this.effectiveAddress = effectiveAddress;
     }
     int memory_pos = 0;
     int ram_pos = 0;
@@ -69,8 +71,7 @@ public class Fetcher
 
     public int getAbsolutePosition(int logicalPosition)
     {
-//        return memory.getAbsolutePosition(logicalPosition);
-        return -1;
+        return effectiveAddress.computeDirectAddress(logicalPosition);
     }
 
 //    public void synchronizeAddress(fetcher job)
