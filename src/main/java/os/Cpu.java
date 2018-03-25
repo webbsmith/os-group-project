@@ -1,8 +1,13 @@
 package os;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Queue;
 
 public class Cpu {
+    private static final Logger log = LoggerFactory.getLogger(Cpu.class);
+
     private final CpuDmaController cpuDmaController;
     private final ProgramQueues programQueues;
     private final Fetcher fetcher;
@@ -16,8 +21,9 @@ public class Cpu {
     }
 
     public void read(int memoryAddressOfPhysicalData, int memoryAddressOfBuffer) {
+        log.trace("read(memoryAddressOfPhysicalData={}, memoryAddressOfBuffer={})", memoryAddressOfPhysicalData, memoryAddressOfBuffer);
         while (!busControl) {
-            // wait
+            // busy wait
         }
         busControl = false;
         cpuDmaController.read(memoryAddressOfPhysicalData, memoryAddressOfBuffer);
@@ -25,8 +31,9 @@ public class Cpu {
     }
 
     public void write(int memoryAddressOfPhysicalData, int memoryAddressOfBuffer) {
+        log.trace("write(memoryAddressOfPhysicalData={}, memoryAddressOfBuffer={})", memoryAddressOfPhysicalData, memoryAddressOfBuffer);
         while (!busControl) {
-            // wait
+            // busy wait
         }
         busControl = false;
         cpuDmaController.write(memoryAddressOfPhysicalData, memoryAddressOfBuffer);
@@ -34,7 +41,7 @@ public class Cpu {
     }
 
     public void run() {
-
-        //todo - loop
+        log.trace("run()");
+        //todo
     }
 }

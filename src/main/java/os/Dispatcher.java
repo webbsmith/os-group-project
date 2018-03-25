@@ -1,8 +1,14 @@
 package os;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Queue;
 
 public class Dispatcher {
+
+    private static final Logger log = LoggerFactory.getLogger(Dispatcher.class);
+
     private final ProcessControlBlock pcb;
     private final Cpu cpu;
 
@@ -13,9 +19,11 @@ public class Dispatcher {
 
     public void assignCpuRegisters() {
         // copy parameter data from PCB to CPU, this preps the OS for calling the CPU
+        log.info("Copying parameter data from PCB to CPU");
+        //todo
     }
 
     public void run() {
-        //todo - loop
+        assignCpuRegisters();
     }
 }
