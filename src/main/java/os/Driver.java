@@ -19,8 +19,8 @@ public class Driver {
         this.loader = new Loader(disk, pcb);
         this.dispatcher = new Dispatcher(pcb, cpu);
         this.memory = new Memory();
-        this.scheduler = new Scheduler(programQueues, disk, memory);
-        this.fetcher = new Fetcher(cpu, memory, null)
+        this.scheduler = new Scheduler(disk, 0, memory, pcb);
+        this.fetcher = new Fetcher(cpu, memory, null);
     }
 
     public void run() {

@@ -2,7 +2,7 @@ package os;
 import java.security.InvalidParameterException;
 import java.util.Formatter;
 
-//With support from the Memory module/method, this method fetches instructions or data from RAM
+//With support from the Memory module/method, this method fetches instructions or data from memory
 //depending on the content of the CPU’s program counter (PC). On instruction fetch, the PC value should
 //point to the next instruction to be fetched. The Fetch method therefore calls the Effective-Address
 //method to translate the logical address to the corresponding absolute address, using the base-register
@@ -22,15 +22,15 @@ public class Fetcher
         this.memory = memory;
         this.decoder = decoder;
     }
-    static int memory_pos = 0;
-    static int ram_pos = 0;
+    int memory_pos = 0;
+    int ram_pos = 0;
 
     int ram = 1024;
     int disk = 4096;
     int position_num;
 
 
-    public static String read(int logicalAddress)
+    public String read(int logicalAddress)
     {
         int logicalNumber = getlogicalPosition(logicalAddress);
         int offset = getOffset(logicalAddress);
@@ -38,7 +38,7 @@ public class Fetcher
         return readFromAbsolute(getAbsolutePosition(logicalNumber), offset);
     }
 
-    public static void write(int logicalAddress, String value)
+    public void write(int logicalAddress, String value)
     {
         int logicalNumber = getlogicalPosition(logicalAddress);
         int offset = getOffset(logicalAddress);
@@ -46,64 +46,69 @@ public class Fetcher
         writeToAbsolute(getAbsolutePosition(logicalNumber), offset, value);
     }
 
-    public static void writeToAbsolute(int physicalPosition, int offset, String value)
+    public void writeToAbsolute(int physicalPosition, int offset, String value)
     {
-        RAM.writeRam(physicalPosition, offset, value);
+//        memory.writeRam(physicalPosition, offset, value);
     }
 
-    public static String readFromAbsolute(int physicalPosition, int offset)
+    public String readFromAbsolute(int physicalPosition, int offset)
     {
-        return RAM.readRam(physicalPosition, offset);
+//        return memory.readRam(physicalPosition, offset);
+        return null;
     }
 
-    public static int getlogicalPosition(int logicalAddress)
+    public int getlogicalPosition(int logicalAddress)
     {
-        return logicalAddress/RAM.getDecoder();
+//        return logicalAddress/memory.getDecoder();
+        return -1;
     }
 
-    public static int getOffset(int logicalAddress)
+    public int getOffset(int logicalAddress)
     {
-        return logicalAddress%RAM.getDecoder();
+//        return logicalAddress%memory.getDecoder();
+        return -1;
     }
 
-    public static int getAbsolutePosition(int logicalPosition)
+    public int getAbsolutePosition(int logicalPosition)
     {
-        return RAM.getAbsolutePosition(logicalPosition);
+//        return memory.getAbsolutePosition(logicalPosition);
+        return -1;
     }
 
-    public static void synchronizeAddress(fetcher job)
-    {
-        int startDiskAddress = job.getJobDiskAddress();
-        int currentDiskAddress = startDiskAddress;
-        int currentMemoryAddress = job.getJobMemoryAddress();
+//    public void synchronizeAddress(fetcher job)
+//    {
+//        int startDiskAddress = job.getJobDiskAddress();
+//        int currentDiskAddress = startDiskAddress;
+//        int currentMemoryAddress = job.getJobMemoryAddress();
+//
+//        for (int i = 0; currentDiskAddress < startDiskAddress + AddressSize; i++)
+//        {
+//            int virtualPosition = job.getAllocatedVirtualPositions().get(i / memory.getDecoder());
+//            int virtualPositionTimesSize = virtualPosition * memory.getDecoder();
+//
+//            write(job.getAllocatedVirtualPositions().get(i / memory.getDecoder()) * memory.getDecoder() + i%memory.getDecoder(), job.getAddress()[i]); //to set?
+//            Disk.writeDisk(job.getAddress()[i], currentDiskAddress);
+//            currentDiskAddress++;
+//            currentMemoryAddress++;
+//        }
+//    }
 
-        for (int i = 0; currentDiskAddress < startDiskAddress + AddressSize; i++)
-        {
-            int virtualPosition = job.getAllocatedVirtualPositions().get(i / RAM.getDecoder());
-            int virtualPositionTimesSize = virtualPosition * RAM.getDecoder();
 
-            write(job.getAllocatedVirtualPositions().get(i / RAM.getDecoder()) * RAM.getDecoder() + i%RAM.getDecoder(), job.getAddress()[i]); //to set?
-            Disk.writeDisk(job.getAddress()[i], currentDiskAddress);
-            currentDiskAddress++;
-            currentMemoryAddress++;
-        }
-    }
+//    String EffectiveAddress(String logicalAddress, String baseRegister)
+//    {
+//        String absoluteAddress = "";
+//        //directly
+//        if(baseRegister == null){absoluteAddress = baseRegister + offset;}
+//        //indirectly
+//        else{absoluteAddress = baseRegister + logicalAddress + offset;}
+//        return absoluteAddress;
+//    }
 
-
-    String EffectiveAddress(String logicalAddress, String baseRegister)
-    {
-        String absoluteAddress = "";
-        //directly
-        if(baseRegister == null){absoluteAddress = baseRegister + offset;}
-        //indirectly
-        else{absoluteAddress = baseRegister + logicalAddress + offset;}
-        return absoluteAddress;
-    }
-
-    public static String[] retrieveFromDisk(int numOfInstructions, int startPC_Counter)
+    public String[] retrieveFromDisk(int numOfInstructions, int startPC_Counter)
     {
         //effectiveAdress formater
-        return everything;
+//        return everything;
+        return null;
     }
 //    base Register values
 
@@ -127,11 +132,14 @@ public class Fetcher
         return i;
     }
 
-    public static String getFromRAM(int PC_Counter){
-        return RAM.readRAM(PC_Counter);
+    public String getFrommemory(int PC_Counter){
+//        return memory.readmemory(PC_Counter);
+        return null;
     }
 
-    public static String getFromDisk(int PC_Counter){
-        return Disk.readDisk(PC_Counter);
+    public String getFromDisk(int PC_Counter){
+//        return Disk.readDisk(PC_Counter);
+        return null;
     }
+
 }
