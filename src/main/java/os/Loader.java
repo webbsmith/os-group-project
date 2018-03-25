@@ -41,7 +41,13 @@ public class Loader {
             while (scan.hasNextLine()) {
                 line = scan.nextLine();
                 if (line.startsWith("//")) {
-                    String lineType = line.split(" ")[1];
+                    String[] lineSplit = line.split(" ");
+                    if (lineSplit.length < 2) {
+                        log.debug("{} >> no action taken", line);
+                        continue;
+                    }
+
+                    String lineType = lineSplit[1];
                     if ("JOB".equalsIgnoreCase(lineType)) {
                         //Line is a control card, info will be sent to the PCB along with the data card
                         log.debug("{} >> setting control card", line);
