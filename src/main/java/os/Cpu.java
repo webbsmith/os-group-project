@@ -10,14 +10,17 @@ public class Cpu {
 
     private final CpuDmaController cpuDmaController;
     private final ProgramQueues programQueues;
-    private final Fetcher fetcher;
+    private final NewFetcher fetcher;
+    private final Decoder decoder;
 
     private boolean busControl = true;
+    private int programCounter = -1;
 
-    public Cpu(ProgramQueues programQueues, CpuDmaController cpuDmaController, Fetcher fetcher) {
+    public Cpu(ProgramQueues programQueues, CpuDmaController cpuDmaController, NewFetcher fetcher, Decoder decoder) {
         this.cpuDmaController = cpuDmaController;
         this.programQueues = programQueues;
         this.fetcher = fetcher;
+        this.decoder = decoder;
     }
 
     public void read(int memoryAddressOfPhysicalData, int memoryAddressOfBuffer) {
@@ -40,8 +43,21 @@ public class Cpu {
         busControl = true;
     }
 
+    private int computeOnly() {
+        while (true) {
+            String instruction = fetcher.fetchInstruction(programCounter);
+            decoder.run(instruction);
+            programCounter++;
+
+        }
+    }
+
     public void run() {
         log.debug("run()");
         //todo
+    }
+
+    public void setProgramCounter(int programCounter) {
+        this.programCounter = programCounter;
     }
 }

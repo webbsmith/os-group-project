@@ -16,7 +16,7 @@ public class Driver {
         Memory memory = new Memory();
         ProgramQueues programQueues = new ProgramQueues();
         Fetcher fetcher = new Fetcher(memory, new Decoder(), new EffectiveAddress(0));
-        this.cpu = new Cpu(programQueues, new CpuDmaController(), fetcher);
+        this.cpu = new Cpu(programQueues, new CpuDmaController(), fetcher, new Decoder());
         Disk disk = new Disk();
         ProcessControlBlock pcb = new ProcessControlBlock();
         this.loader = new Loader(disk, pcb);

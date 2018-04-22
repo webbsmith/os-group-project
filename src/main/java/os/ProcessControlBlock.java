@@ -45,7 +45,20 @@ public class ProcessControlBlock {
     private int[] jobInputBufferLocation = new int[100];
     private int[] jobOutputBufferLocation = new int[100];
 
-    public void newJob(String jobNum, String length, String priority, String inputb, String outputb, String tempb){
+    // don't know if any of this is needed, it's just from his example
+    private State state;
+    private int codeSize;
+    private int schedule;
+    private int accounts;
+    private int memories;
+    private int progeny;
+    private int parent;
+    private int resources;
+    private int status;
+    private int statusInfo;
+    private int priority;
+
+    public void newJob(String jobNum, String length, String priority, String inputb, String outputb, String tempb) {
         log.info("newJob(jobNum={}, length={}, priority={}, inputb={}, outputb={}, tempb={})", jobNum, length, priority, inputb, outputb, tempb);
         int jobNumber = Integer.parseInt(jobNum, 16) - 1;
         jobLength[jobNumber] = Integer.parseInt(length, 16);
@@ -55,27 +68,27 @@ public class ProcessControlBlock {
         jobTemporaryBuffer[jobNumber] = Integer.parseInt(tempb, 16);
     }
 
-    public int getPriority(int x){
+    public int getPriority(int x) {
         log.trace("getPriority(x={})", x);
         return jobPriority[x - 1];
     }
 
-    public void setPriority(int x, int temp){
+    public void setPriority(int x, int temp) {
         log.trace("setPriority(x={}, temp={})", x, temp);
         jobPriority[x - 1] = temp;
     }
 
-    public int getLength(int x){
+    public int getLength(int x) {
         log.trace("getLength(x={})", x);
         return jobLength[x - 1];
     }
 
-    public void setLength(int x, int temp){
+    public void setLength(int x, int temp) {
         log.trace("setLength(x={}, temp={})", x, temp);
         jobLength[x - 1] = temp;
     }
 
-    public int getInputBuffer(int x){
+    public int getInputBuffer(int x) {
         log.trace("getInputBuffer(x={})", x);
         return jobInputBuffer[x - 1];
     }
@@ -85,63 +98,63 @@ public class ProcessControlBlock {
         jobInputBuffer[x - 1] = temp;
     }
 
-    public int getOutputBuffer(int x){
+    public int getOutputBuffer(int x) {
         log.trace("getOutputBuffer(x={})", x);
         return jobOutputBuffer[x - 1];
     }
 
-    public void setOutputBuffer(int x, int temp){
+    public void setOutputBuffer(int x, int temp) {
         log.trace("setOutputBuffer(x={}, temp={})", x, temp);
         jobOutputBuffer[x - 1] = temp;
     }
 
-    public int getTempBuffer(int x){
+    public int getTempBuffer(int x) {
         log.trace("getTempBuffer(x={})", x);
         return jobTemporaryBuffer[x - 1];
     }
 
-    public void setTempBuffer(int x, int temp){
+    public void setTempBuffer(int x, int temp) {
         log.trace("setTempBuffer(x={}, temp={})", x, temp);
         jobTemporaryBuffer[x - 1] = temp;
     }
 
-    public int getJobStart(int x){
+    public int getJobStart(int x) {
         log.trace("getJobStart(x={})", x);
         return jobMemoryStart[x - 1];
     }
 
-    public void setJobStart(int x, int temp){
+    public void setJobStart(int x, int temp) {
         log.trace("setJobStart(x={}, temp={})", x, temp);
         jobMemoryStart[x - 1] = temp;
     }
 
-    public int getJobEnd(int x){
+    public int getJobEnd(int x) {
         log.trace("getJobEnd(x={})", x);
         return jobMemoryEnd[x - 1];
     }
 
-    public void setJobEnd(int x, int temp){
+    public void setJobEnd(int x, int temp) {
         log.trace("setJobEnd(x={}, temp={})", x, temp);
 
         jobMemoryEnd[x - 1] = temp;
     }
 
-    public int getInputBufferLocation(int x){
+    public int getInputBufferLocation(int x) {
         log.trace("getInputBufferLocation(x={})", x);
         return jobInputBufferLocation[x - 1];
     }
 
-    public void setInputBufferLocation(int x, int temp){
+    public void setInputBufferLocation(int x, int temp) {
         log.trace("setInputBufferLocation(x={}, temp={})", x, temp);
         jobInputBufferLocation[x - 1] = temp;
     }
 
-    public int getOutputBufferLocation(int x){
+    public int getOutputBufferLocation(int x) {
         log.trace("getOutputBufferLocation(x={})", x);
         return jobOutputBufferLocation[x - 1];
     }
 
-    public void setOutputBufferLocation(int x, int temp){
+    public void setOutputBufferLocation(int x, int temp) {
         log.trace("setOutputBufferLocation(x={}, temp={})", x, temp);
         jobOutputBufferLocation[x - 1] = temp;
     }
