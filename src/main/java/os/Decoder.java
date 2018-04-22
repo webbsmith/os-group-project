@@ -4,19 +4,19 @@ import java.math.BigInteger;
 
 public class Decoder {
 
-    public String hexToBinary(String hex){
+    private String hexToBinary(String hex){
         return new BigInteger(hex, 16).toString(2);
     }
 
-    public String binToHexidecimal(String bin){
+    private String binToHexidecimal(String bin){
         return new BigInteger(bin, 2).toString(16);
     }
 
-    public String binToDecimal(String bin){
+    private String binToDecimal(String bin){
         return new BigInteger(bin,2).toString(10);
     }
 
-    public int typeDetermination(String bits){
+    private int typeDetermination(String bits){
         int intbits = Integer.parseInt(bits);
         if(intbits == 0)
             return 1; //Arithmetic Instruction
@@ -29,7 +29,7 @@ public class Decoder {
         return 0;
     }
 
-    public Operation arithmeticInstruction(String instruction, String[] Registers){
+    private Operation arithmeticInstruction(String instruction, String[] Registers){
         System.out.println("Arithmetic Instruction");
         String OPCODE = binToHexidecimal(instruction.substring(2,8));
         System.out.println("OPCODE: " + OPCODE);
@@ -76,36 +76,39 @@ public class Decoder {
         }
 
         return Operation.builder()
+                .type(Operation.Type.MATH)
                 .opCode(OPCODE)
                 .sourceRegister1(stringSReg)
                 .sourceRegister2(stringSReg2)
                 .destinationRegister(stringDReg)
                 .build();
     }
-    public Operation branchInstruction(String instruction, String[] Registers){
+    private Operation branchInstruction(String instruction, String[] Registers){
         System.out.println("---Branch Instruction---");
         String OPCODE = instruction.substring(2,8);
         String BReg = instruction.substring(8,12);
         String DReg = instruction.substring(12,16);
         String Address = instruction.substring(16,32);
         return Operation.builder()
+                .type(Operation.Type.CONDITIONAL_BRANCH)
                 .opCode(OPCODE)
                 .branchRegister(BReg)
                 .destinationRegister(DReg)
                 .addressOrData(Address)
                 .build();
     }
-    public Operation jumpInstruction(String instruction, String[] Registers){
+    private Operation jumpInstruction(String instruction, String[] Registers){
         System.out.println("---Jump Instruction---");
         String OPCODE = binToHexidecimal(instruction.substring(2,8));
         String Address = instruction.substring(8,32);
         System.out.println("Jump to specified address.");
         return Operation.builder()
+                .type(Operation.Type.UNCONDITIONAL_JUMP)
                 .opCode(OPCODE)
                 .addressOrData(Address)
                 .build();
     }
-    public Operation inputOutputInstruction(String instruction, String[] Registers, String inputBuffer, String outputBuffer){
+    private Operation inputOutputInstruction(String instruction, String[] Registers, String inputBuffer, String outputBuffer){
         System.out.println("---Input/Output Instruction---");
         String OPCODE = binToHexidecimal(instruction.substring(2,8));
         System.out.println("OPCODE: " + OPCODE);
@@ -122,6 +125,7 @@ public class Decoder {
             System.out.println("Writes content of accumulator into O/P buffer");
         }
         return Operation.builder()
+                .type(Operation.Type.IO_INSTRUCTION)
                 .opCode(OPCODE)
                 .sourceRegister1(stringSReg)
                 .sourceRegister2(stringSReg2)

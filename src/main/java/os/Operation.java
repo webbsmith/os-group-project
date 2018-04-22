@@ -8,6 +8,8 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class Operation {
+    enum Type { MATH, CONDITIONAL_BRANCH, UNCONDITIONAL_JUMP, IO_INSTRUCTION}
+    private final Type type;
     private final String opCode;
     private final String sourceRegister1;
     private final String sourceRegister2;
