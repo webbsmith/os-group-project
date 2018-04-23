@@ -2,6 +2,8 @@ package os;
 
 import lombok.Data;
 
+import static java.lang.Integer.parseInt;
+
 @Data
 public class Program implements Comparable<Program> {
     // All of these are in hex
@@ -57,19 +59,20 @@ public class Program implements Comparable<Program> {
     }
 
     private static int binaryToDecimal(String binary) {
-        return Integer.parseInt(binary, 2);
+        return parseInt(binary, 2);
     }
 
     @Override
     public int compareTo(Program o) {
-        return -Integer.compare(Integer.parseInt(this.priorityNumber, 16), Integer.parseInt(o.priorityNumber, 16));
+        return -Integer.compare(parseInt(this.priorityNumber, 16), parseInt(o.priorityNumber, 16));
     }
 
     public String stats() {
         return "id: " + id + ';' +
                 " time_waiting: " + (executionStartTime - initializationTime) + ';' +
                 " time_running: " + (completionTime - executionStartTime) + ';' +
-                " io_operations: " + ioOperationCount;
+                " io_operations: " + ioOperationCount + ';' +
+                " memory_percentage: " + (parseInt(inputBufferSize) + ioOperationCount) / 1024;
     }
 
     public void incrementIoOperations() {
