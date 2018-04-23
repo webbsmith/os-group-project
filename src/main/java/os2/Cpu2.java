@@ -46,12 +46,12 @@ public class Cpu2 {
             case "00": // RD: Reads content of input buffer into an accumulator
                 String data;
                 if (operation.getSourceRegister2().equals("0000")) {
-                    data = disk.getWord(program.getInputBufferCounterAndIncrement()).substring(2);
+                    data = decoder.hexToBinary(disk.getWord(program.getInputBufferCounterAndIncrement()).substring(2));
                 } else {
-                    data = program.getData(program.getData(operation.getSourceRegister2()));
+                    data = program.getData(operation.getSourceRegister2());
                 }
                 log.debug("data: {}", data);
-                program.storeData(decoder.hexToBinary(data), operation.getSourceRegister1());
+                program.storeData(data, operation.getSourceRegister1());
                 break;
             case "01": // WR: Writes content of accumulator into output buffer
                 log.info("OUTPUT BUFFER: {}", program.getData(operation.getSourceRegister1()));
@@ -60,10 +60,14 @@ public class Cpu2 {
                 program.storeData(program.getData(operation.getDestinationRegister()), operation.getBranchRegister());
                 break;
             case "03": // LW: Loads content of an address into a register
+                program.storeData(program.getData(operation.getBranchRegister()), operation.getDestinationRegister());
                 break;
             case "04": // MOV: Transfers the content of one register into another
+                program.storeData(program.getData(operation.getSourceRegister1()), operation.getDestinationRegister());
                 break;
             case "05": // ADD: Adds content of two S-regs into D-reg
+                int sumOfAdd = binaryToDecimal(program.getData(operation.getSourceRegister1())) + binaryToDecimal(program.getData(operation.getSourceRegister2()));
+                program.storeData(decimalToBinary(sumOfAdd), operation.getDestinationRegister());
                 break;
             case "06": // SUB: Subtracts content of two S-regs into D-reg
                 break;
@@ -91,7 +95,7 @@ public class Cpu2 {
                 break;
             case "10": // SLT: Sets the D-reg to 1 if first S-reg is less than the second S-reg; 0 otherwise (Bobbie's notes say B-reg instead of second S-reg)
                 String oneOrZero = "0";
-                if (binaryToDecimal(operation.getSourceRegister1()) < binaryToDecimal(operation.getSourceRegister2())) {
+                if (binaryToDecimal(program.getData(operation.getSourceRegister1())) < binaryToDecimal(program.getData(operation.getSourceRegister2()))) {
                     oneOrZero = "1";
                 }
                 program.storeData(oneOrZero, operation.getDestinationRegister());
@@ -99,6 +103,7 @@ public class Cpu2 {
             case "11": // SLTI: Sets the D-reg to 1 if first S-reg is less than a data; 0 otherwise
                 break;
             case "12": // HLT: Logical end of program
+                log.info("HLT: End of program");
                 break;
             case "13": // NOP: Does nothing and moves to next instruction
                 break;
@@ -107,7 +112,7 @@ public class Cpu2 {
             case "15": // BEQ: Branches to an address when content of B-reg = D-reg
                 break;
             case "16": // BNE: Branches to an address when content of B-reg <> D-reg
-                if (!operation.getBranchRegister().equals(operation.getDestinationRegister())) {
+                if (binaryToDecimal(program.getData(operation.getBranchRegister())) != binaryToDecimal(program.getData(operation.getDestinationRegister()))) {
                     programCounter = binaryToDecimal(operation.getAddressOrData()) / 4;
                 }
                 break;
