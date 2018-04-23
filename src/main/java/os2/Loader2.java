@@ -23,7 +23,10 @@ public class Loader2 {
     private void readEachLine(Scanner scan) {
         Program currentProgram = new Program();
         while (scan.hasNextLine()) {
-            String line = scan.nextLine().toUpperCase();
+            String line = scan.nextLine();
+            if (line.startsWith("//")) {
+                line = line.toUpperCase();
+            }
             if (line.contains("END")) {
                 schedule(currentProgram);
                 currentProgram = new Program();
@@ -37,7 +40,7 @@ public class Loader2 {
                 setDataAttributes(currentProgram, line);
                 continue;
             }
-            if (!line.startsWith("0X")) {
+            if (!line.startsWith("0x")) {
                 throw new IllegalArgumentException("Invalid input: " + line);
             }
             log.trace("{} >> sending to Disk", line);

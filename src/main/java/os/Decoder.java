@@ -142,7 +142,7 @@ public class Decoder {
         //Instruction                                                                                                   //INPUT NEEDS TO BE FIXED SAMPLE DATA
         //String instruction = args;
 //        String hexInstruction = "0x00000045".substring(2,10); //0xC10000C0                                              //SOMETHING ISN'T RIGHT WITH 0x00000045
-        String instruction = hexToBinary(hexInstruction);
+        String instruction = hexToBinary(hexInstruction.substring(2));
         System.out.println(instruction);
 
         //Leading Zeros Fix
@@ -158,16 +158,16 @@ public class Decoder {
         }
 
         //VISUALIZATION - TO BE DELETED
-        System.out.println("-----BINARY SEPARATION-----");
-        System.out.println("ARITHMETIC");
-        System.out.println(instruction.substring(0,2) + " " + instruction.substring(2,8) + " " + instruction.substring(8,12) + " " + instruction.substring(12,16) + " " + instruction.substring(16,20) + " " +instruction.substring(20,32));
-        System.out.println();
-        System.out.println("JUMP");
-        System.out.println(instruction.substring(0,2) + " " + instruction.substring(2,8) + " " + instruction.substring(8,32));
-        System.out.println();
-        System.out.println("INPUT OUTPUT");
-        System.out.println(instruction.substring(0,2) + " " + instruction.substring(2,8) + " " + instruction.substring(8,12) + " " + instruction.substring(12,16) + " " + instruction.substring(16,32));
-        System.out.println();
+//        System.out.println("-----BINARY SEPARATION-----");
+//        System.out.println("ARITHMETIC");
+//        System.out.println(instruction.substring(0,2) + " " + instruction.substring(2,8) + " " + instruction.substring(8,12) + " " + instruction.substring(12,16) + " " + instruction.substring(16,20) + " " +instruction.substring(20,32));
+//        System.out.println();
+//        System.out.println("JUMP");
+//        System.out.println(instruction.substring(0,2) + " " + instruction.substring(2,8) + " " + instruction.substring(8,32));
+//        System.out.println();
+//        System.out.println("INPUT OUTPUT");
+//        System.out.println(instruction.substring(0,2) + " " + instruction.substring(2,8) + " " + instruction.substring(8,12) + " " + instruction.substring(12,16) + " " + instruction.substring(16,32));
+//        System.out.println();
 
         //Registers
         String[] Registers = new String[16];

@@ -23,7 +23,7 @@ public class Cpu2 {
     boolean active = false;
     boolean interrupted = false;
 
-    private int compute(Program program) {
+    public int compute(Program program) {
         active = true;
         while (!interrupted) {
             programCounter = program.getProgramCounter();
@@ -103,16 +103,11 @@ public class Cpu2 {
         }
     }
 
-    public void run() {
-        log.debug("run()");
-        //todo
-    }
-
     public void setProgramCounter(int programCounter) {
         this.programCounter = programCounter;
     }
 
-    public boolean notActive() {
-        return !active;
+    public boolean isActive() {
+        return active;
     }
 }
