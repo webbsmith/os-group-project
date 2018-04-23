@@ -115,15 +115,26 @@ public class Cpu2 {
                 program.storeData(oneOrZero, operation.getDestinationRegister());
                 break;
             case "11": // SLTI: Sets the D-reg to 1 if first S-reg is less than a data; 0 otherwise
+                String oneOrZeroSltI = "0";
+                if (binaryToDecimal(program.getData(operation.getSourceRegister1())) < binaryToDecimal(operation.getAddressOrData())) {
+                    oneOrZeroSltI = "1";
+                }
+                program.storeData(oneOrZeroSltI, operation.getDestinationRegister());
                 break;
             case "12": // HLT: Logical end of program
                 log.info("HLT: End of program");
                 break;
             case "13": // NOP: Does nothing and moves to next instruction
+                log.info("NOP: Doing nothing and moving to next instruction");
                 break;
             case "14": // JMP: Jumps to a specified location
+                programCounter = binaryToDecimal(operation.getAddressOrData()) / 4;
+                log.info("JMP: Jumping to {}", programCounter);
                 break;
             case "15": // BEQ: Branches to an address when content of B-reg = D-reg
+                if (binaryToDecimal(program.getData(operation.getBranchRegister())) == binaryToDecimal(program.getData(operation.getDestinationRegister()))) {
+                    programCounter = binaryToDecimal(operation.getAddressOrData()) / 4;
+                }
                 break;
             case "16": // BNE: Branches to an address when content of B-reg <> D-reg
                 if (binaryToDecimal(program.getData(operation.getBranchRegister())) != binaryToDecimal(program.getData(operation.getDestinationRegister()))) {
@@ -131,12 +142,24 @@ public class Cpu2 {
                 }
                 break;
             case "17": // BEZ: Branches to an address when content of B-reg = 0
+                if (binaryToDecimal(program.getData(operation.getBranchRegister())) == 0) {
+                    programCounter = binaryToDecimal(operation.getAddressOrData()) / 4;
+                }
                 break;
             case "18": // BNZ: Branches to an address when content of B-reg <> 0
+                if (binaryToDecimal(program.getData(operation.getBranchRegister())) != 0) {
+                    programCounter = binaryToDecimal(operation.getAddressOrData()) / 4;
+                }
                 break;
             case "19": // BGZ: Branches to an address when content of B-reg > 0
+                if (binaryToDecimal(program.getData(operation.getBranchRegister())) > 0) {
+                    programCounter = binaryToDecimal(operation.getAddressOrData()) / 4;
+                }
                 break;
             case "1A": // BLZ: Branches to an address when content of B-reg < 0
+                if (binaryToDecimal(program.getData(operation.getBranchRegister())) < 0) {
+                    programCounter = binaryToDecimal(operation.getAddressOrData()) / 4;
+                }
                 break;
         }
         log.info("program status: " + program);
