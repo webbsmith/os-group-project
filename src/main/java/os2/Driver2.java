@@ -13,6 +13,8 @@ public class Driver2 {
     private final Dispatcher dispatcher;
     private final Cpu cpu;
 
+    private volatile boolean stillWorking = true;
+
     public Driver2() {
         Memory memory = new Memory();
         ProgramQueues programQueues = new ProgramQueues();
@@ -28,8 +30,8 @@ public class Driver2 {
     public void run() {
         log.info("Running loader");
         loader.load("program-input.txt");
-        while (!interrupted()) {
-            scheduler.next();
+        while (!interrupted() && stillWorking) {
+            stillWorking = scheduler.next();
         }
     }
 

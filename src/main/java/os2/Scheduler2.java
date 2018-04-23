@@ -28,10 +28,9 @@ public enum Scheduler2 {
         programQueues.addToNew(currentProgram);
     }
 
-    public void next() {
-        if (Thread.currentThread().isInterrupted()) return;
+    public boolean next() {
+        if (Thread.currentThread().isInterrupted()) return false;
         while (!cpuQueue.isEmpty()) {
-
             Cpu2 cpu = cpuQueue.poll();
 
             if (cpu.isActive()) {
@@ -44,7 +43,7 @@ public enum Scheduler2 {
                 if (activePrograms.get() == 0) {
                     log.info("All programs finished");
                     Thread.currentThread().interrupt();
-                    return;
+                    return false;
                 }
                 continue;
             }
@@ -61,6 +60,7 @@ public enum Scheduler2 {
             }).start();
 
         }
+        return true;
     }
 
 }
