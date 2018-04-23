@@ -72,7 +72,7 @@ public class Program implements Comparable<Program> {
                 " time_waiting: " + (executionStartTime - initializationTime) + ';' +
                 " time_running: " + (completionTime - executionStartTime) + ';' +
                 " io_operations: " + ioOperationCount + ';' +
-                " memory_percentage: " + (parseInt(inputBufferSize) + ioOperationCount) / 1024;
+                " memory_percentage: " + (parseInt(inputBufferSize) + ioOperationCount) / 1024.0;
     }
 
     public void incrementIoOperations() {
