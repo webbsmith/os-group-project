@@ -15,8 +15,10 @@ public enum Scheduler2 {
 
     private final Memory memory = new Memory();
 
-    private final ProgramQueues2 programQueues = ProgramQueues2.INSTANCE; // Swap for ProgramQueues2 for FIFO scheduling
+    private final ProgramQueuesPriority programQueues = ProgramQueuesPriority.INSTANCE; // Swap for ProgramQueues2 for FIFO scheduling
     private final Deque<Cpu2> cpuQueue = new LinkedList<>();
+
+    private volatile boolean stillWorking = true;
 
     private volatile AtomicInteger activePrograms = new AtomicInteger(0);
     {
@@ -29,7 +31,7 @@ public enum Scheduler2 {
     }
 
     public boolean next() {
-        if (Thread.currentThread().isInterrupted()) return false;
+        if (Thread.currentThread().isInterrupted()) return stillWorking;
         while (!cpuQueue.isEmpty()) {
             Cpu2 cpu = cpuQueue.poll();
 
@@ -43,7 +45,8 @@ public enum Scheduler2 {
                 if (activePrograms.get() == 0) {
                     log.info("All programs finished");
                     Thread.currentThread().interrupt();
-                    return false;
+                    stillWorking = false;
+                    return stillWorking;
                 }
                 continue;
             }
