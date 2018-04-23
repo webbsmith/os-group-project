@@ -68,7 +68,7 @@ public class Program implements Comparable<Program> {
     public String stats() {
         return "id: " + id + ';' +
                 " time_waiting: " + (executionStartTime - initializationTime) + ';' +
-                " time_running: " + (completionTime - executionStartTime) +
+                " time_running: " + (completionTime - executionStartTime) + ';' +
                 " io_operations: " + ioOperationCount;
     }
 
