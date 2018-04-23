@@ -3,7 +3,7 @@ package os;
 import lombok.Data;
 
 @Data
-public class Program {
+public class Program implements Comparable<Program> {
     // All of these are in hex
     private String id;
     private String instructionCount;
@@ -52,5 +52,10 @@ public class Program {
 
     private static int binaryToDecimal(String binary) {
         return Integer.parseInt(binary, 2);
+    }
+
+    @Override
+    public int compareTo(Program o) {
+        return -Integer.compare(Integer.parseInt(this.priorityNumber, 16), Integer.parseInt(o.priorityNumber, 16));
     }
 }

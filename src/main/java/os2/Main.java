@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Main {
-    public static final int CPU_COUNT = 2;
+    public static final int CPU_COUNT = 1;
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();

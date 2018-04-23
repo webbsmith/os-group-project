@@ -15,7 +15,7 @@ public enum Scheduler2 {
 
     private final Memory memory = new Memory();
 
-    private final ProgramQueues2 programQueues2 = ProgramQueues2.INSTANCE;
+    private final ProgramQueuesPriority programQueues = ProgramQueuesPriority.INSTANCE; // Swap for ProgramQueues2 for FIFO scheduling
     private final Deque<Cpu2> cpuQueue = new LinkedList<>();
 
     private volatile AtomicInteger activePrograms = new AtomicInteger(0);
@@ -25,7 +25,7 @@ public enum Scheduler2 {
     }
 
     public void schedule(Program currentProgram) {
-        programQueues2.addToNew(currentProgram);
+        programQueues.addToNew(currentProgram);
     }
 
     public void next() {
@@ -38,7 +38,7 @@ public enum Scheduler2 {
                 continue;
             }
 
-            Program program = programQueues2.nextNew();
+            Program program = programQueues.nextNew();
             if (program == null) {
                 log.info("All programs started");
                 if (activePrograms.get() == 0) {

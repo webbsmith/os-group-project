@@ -181,7 +181,7 @@ public class Cpu2 {
     private void incrementCounter() {
         programCounter++;
         operationCount++;
-        if (operationCount == 300) {
+        if (operationCount >= 300) {
             log.warn("CPU performed 300 operations for the current program. There may be something wrong.");
             interrupted = true;
         }
@@ -192,7 +192,12 @@ public class Cpu2 {
     }
 
     private static int binaryToDecimal(String binary) {
-        return Integer.parseInt(binary, 2);
+        try {
+            return Integer.parseInt(binary, 2);
+        } catch (NumberFormatException e) {
+            log.warn("Could not convert binary to integer: {}", binary);
+            return -1;
+        }
     }
 
     private static String decimalToBinary(int decimal) {
