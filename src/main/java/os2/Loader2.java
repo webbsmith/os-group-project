@@ -18,6 +18,7 @@ public class Loader2 {
         try (Scanner scan = getScanner(file)) {
             readEachLine(scan);
         }
+        log.info("file read complete");
     }
 
     private void readEachLine(Scanner scan) {
