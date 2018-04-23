@@ -54,7 +54,7 @@ public class Cpu2 {
                 program.storeData(data, operation.getSourceRegister1());
                 break;
             case "01": // WR: Writes content of accumulator into output buffer
-                log.info("OUTPUT BUFFER: {}", program.getData(operation.getSourceRegister1()));
+                writeToOutput(program.getData(operation.getSourceRegister1()));
                 break;
             case "02": // ST: Stores register's content to an address
                 program.storeData(program.getData(operation.getDestinationRegister()), operation.getBranchRegister());
@@ -82,8 +82,12 @@ public class Cpu2 {
                 program.storeData(decimalToBinary(quotient), operation.getDestinationRegister());
                 break;
             case "09": // AND: Logical AND of two S-regs into D-reg
+                int logicalAnd = binaryToDecimal(program.getData(operation.getSourceRegister1())) & binaryToDecimal(program.getData(operation.getSourceRegister2()));
+                program.storeData(decimalToBinary(logicalAnd), operation.getDestinationRegister());
                 break;
             case "0A": // OR: Logical OR of two S-regs into D-reg
+                int logicalOr = binaryToDecimal(program.getData(operation.getSourceRegister1())) | binaryToDecimal(program.getData(operation.getSourceRegister2()));
+                program.storeData(decimalToBinary(logicalOr), operation.getDestinationRegister());
                 break;
             case "0B": // MOVI: Transfers address/data directly into a register
                 program.storeData(operation.getAddressOrData(), operation.getDestinationRegister());
@@ -136,6 +140,10 @@ public class Cpu2 {
                 break;
         }
         log.info("program status: " + program);
+    }
+
+    private void writeToOutput(String data) {
+        log.info("OUTPUT BUFFER: {}", data);
     }
 
     public void setProgramCounter(int programCounter) {
