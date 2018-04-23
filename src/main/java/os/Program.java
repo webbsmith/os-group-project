@@ -64,7 +64,8 @@ public class Program implements Comparable<Program> {
 
     @Override
     public int compareTo(Program o) {
-        int priorityComparison = -Integer.compare(parseInt(this.priorityNumber, 16), parseInt(o.priorityNumber, 16));
+        int priorityComparison = -Integer.compare(parseInt(this.priorityNumber, 16),
+                parseInt(o.priorityNumber, 16));
         if (priorityComparison != 0) return priorityComparison;
         // If priorities are the same, judge by program id
         return Integer.compare(parseInt(id, 16), parseInt(o.id, 16));
