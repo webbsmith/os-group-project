@@ -11,7 +11,7 @@ public class Main {
         Driver2 driver = new Driver2();
         driver.run();
         long timeToComplete = System.currentTimeMillis() - startTime;
-        log.info("Started all programs");
+        log.info("Waiting");
         Thread.sleep(1000); // Wait for all threads to finish
         log.info("Finished all programs in {} ms", timeToComplete);
     }
