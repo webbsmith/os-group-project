@@ -23,7 +23,11 @@ public class Disk{
     public String[] word = new String[2048];
     public int counter = 0;
 
-    public void newWord(String newword){
+    public int getNextAddress() {
+        return counter;
+    }
+
+    public int newWord(String newword){
         if(counter < 2048){
             word[counter] = newword;
             counter++;
@@ -31,6 +35,7 @@ public class Disk{
         else{
             System.out.println("No more space in disk memory.");
         }
+        return counter;
     }
 
     public String getWord(int x){

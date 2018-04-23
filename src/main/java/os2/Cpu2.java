@@ -1,6 +1,7 @@
 package os2;
 
 import lombok.extern.slf4j.Slf4j;
+import os.Disk;
 import os.Program;
 import os.ProgramQueues;
 
@@ -11,6 +12,7 @@ import java.util.Scanner;
 @Slf4j
 public class Cpu2 {
     private final ProgramQueues programQueues = new ProgramQueues();
+    private final Disk disk = new Disk();
 
     private void load(String fileName) {
         log.info("Reading input file {}", fileName);
@@ -25,7 +27,7 @@ public class Cpu2 {
         while (scan.hasNextLine()) {
             String line = scan.nextLine().toUpperCase();
             if (line.contains("END")) {
-                addProgramToMemory(currentProgram);
+                schedule(currentProgram);
                 currentProgram = new Program();
                 return;
             }
@@ -34,38 +36,27 @@ public class Cpu2 {
                 currentProgram.setId(lineSplit[2]);
                 currentProgram.setInstructionCount(lineSplit[2]);
                 currentProgram.setPriorityNumber(lineSplit[3]);
+                currentProgram.setProgramCounter(disk.getNextAddress());
                 return;
             }
             if (line.contains("DATA")) {
                 String[] lineSplit = line.split(" ");
                 currentProgram.setInputBufferSize(lineSplit[2]);
-                currentProgram.setOutputBufferSize(lineSplit[2]);
-                currentProgram.setTemporaryBufferSize(lineSplit[3]);
+                currentProgram.setOutputBufferSize(lineSplit[3]);
+                currentProgram.setTemporaryBufferSize(lineSplit[4]);
+                return;
             }
-
-
-                String lineType = lineSplit[1];
-                if ("JOB".equalsIgnoreCase(lineType)) {
-                    //Line is a control card, info will be sent to the PCB along with the data card
-                    log.debug("{} >> setting control card", line);
-                    controlCard = line;
-                } else if ("DATA".equalsIgnoreCase(lineType)) {
-                    //Line is a data card, info is sent to the PCB along with control card info
-                    log.debug("{} >> sending to PCB", line);
-                    CCInfo = controlCard.split(" ", 5);
-                    DataCard = line.split(" ", 5);
-                    processControlBlock.newJob(CCInfo[2], CCInfo[3], CCInfo[4], DataCard[2], DataCard[3], DataCard[4]);
-                } else {
-                    log.trace("{} >> no action taken", line);
-                }
-
-            } else {
-                //Line is not a control card, must be sent to disk object
-
+            if (!line.startsWith("0x")) {
+                throw new IllegalArgumentException("Invalid input: " + line);
+            }
+            if (currentProgram.)
                 log.trace("{} >> sending to Disk", line);
                 disk.newWord(line);
             }
         }
+
+    private void schedule(Program currentProgram) {
+        programQueues.addToNew(currentProgram);
     }
 
     private Scanner getScanner(File file) {
