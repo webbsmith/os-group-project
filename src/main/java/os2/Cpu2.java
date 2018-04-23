@@ -36,7 +36,12 @@ public class Cpu2 {
                 currentProgram.setPriorityNumber(lineSplit[3]);
                 return;
             }
-            if (line)
+            if (line.contains("DATA")) {
+                String[] lineSplit = line.split(" ");
+                currentProgram.setInputBufferSize(lineSplit[2]);
+                currentProgram.setOutputBufferSize(lineSplit[2]);
+                currentProgram.setTemporaryBufferSize(lineSplit[3]);
+            }
 
 
                 String lineType = lineSplit[1];
