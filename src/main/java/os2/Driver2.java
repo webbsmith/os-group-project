@@ -30,7 +30,7 @@ public class Driver2 {
     public void run() {
         log.info("Running loader");
         loader.load("program-input.txt");
-        while (!interrupted() && stillWorking) {
+        while (!interrupted() && isStillWorking()) {
             stillWorking = scheduler.next();
         }
     }
@@ -44,4 +44,7 @@ public class Driver2 {
     }
 
 
+    private synchronized boolean isStillWorking() {
+        return stillWorking;
+    }
 }
