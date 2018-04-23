@@ -15,9 +15,9 @@ public class Decoder {
     private String binToHexidecimal(String bin){
         String s = new BigInteger(bin, 2).toString(16);
         if (s.length() == 1) {
-            return "0" + s;
+            s = "0" + s;
         }
-        return s;
+        return s.toUpperCase();
     }
 
     private String binToDecimal(String bin){

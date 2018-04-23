@@ -31,10 +31,6 @@ public class Driver2 {
         while (true) {
             log.info("Running scheduler");
             scheduler.next();
-            log.info("Running dispatcher");
-//            dispatcher.run();
-            log.info("Running CPU");
-//            cpu.run();
             waitForInterrupt();
         }
     }
