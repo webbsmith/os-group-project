@@ -18,7 +18,8 @@ public enum Scheduler2 {
     private final List<Cpu2> cpus = new ArrayList<>();
 
     {
-        cpus.add(new Cpu2(new Decoder()));
+        for (int i = 0; i < Main.CPU_COUNT; i++)
+            cpus.add(new Cpu2(new Decoder()));
     }
 
     public void schedule(Program currentProgram) {
@@ -26,12 +27,18 @@ public enum Scheduler2 {
     }
 
     public void next() {
-        for (int i = Main.CPU_COUNT; i < cpus.size(); i++) {
+        if (Thread.currentThread().isInterrupted()) return;
+        for (int i = 0; i < Main.CPU_COUNT; i++) {
+
             Cpu2 cpu = cpus.get(i);
             if (cpu.isActive()) continue;
 
             Program program = programQueues2.nextNew();
-            if (program == null) exit();
+            if (program == null) {
+                log.info("All programs executed");
+                Thread.currentThread().interrupt();
+                return;
+            }
 
             program.setStatus("RUNNING");
             program.setCpuId(i);
@@ -41,8 +48,4 @@ public enum Scheduler2 {
         }
     }
 
-    public void exit() {
-        log.info("All programs executed.");
-        System.exit(0);
-    }
 }

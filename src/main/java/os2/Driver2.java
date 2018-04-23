@@ -28,16 +28,17 @@ public class Driver2 {
     public void run() {
         log.info("Running loader");
         loader.load("program-input.txt");
-        while (true) {
+        while (!interrupted()) {
             scheduler.next();
-            checkForInterrupt();
         }
     }
 
-    private void checkForInterrupt() {
+    private boolean interrupted() {
         if (Thread.interrupted()) {
-            throw new RuntimeException("Thread interrupted");
+            log.info("Thread interrupted");
+            return true;
         }
+        return false;
     }
 
 

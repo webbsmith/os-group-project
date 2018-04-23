@@ -180,8 +180,8 @@ public class Cpu2 {
     private void incrementCounter() {
         programCounter++;
         operationCount++;
-        if (operationCount == 200) {
-            log.warn("CPU performed 200 operations for the current program. There may be something wrong.");
+        if (operationCount == 300) {
+            log.warn("CPU performed 300 operations for the current program. There may be something wrong.");
             interrupted = true;
         }
     }
