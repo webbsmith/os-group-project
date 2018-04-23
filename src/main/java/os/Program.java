@@ -20,11 +20,17 @@ public class Program {
 
     private List<String> registers = new ArrayList<>();
 
+    private String status;
+
     public int getInputBufferCounterAndIncrement() {
         return inputBufferCounter++;
     }
 
     public void storeInAccumulator(String data) {
         registers.add(0, data);
+    }
+
+    public void setStatus(String s) {
+        status = s;
     }
 }

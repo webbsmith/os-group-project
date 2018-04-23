@@ -4,6 +4,10 @@ import java.math.BigInteger;
 
 public class Decoder {
 
+    public int hexToDecimal(String hex) {
+        return new BigInteger(hex, 16).intValue();
+    }
+
     private String hexToBinary(String hex){
         return new BigInteger(hex, 16).toString(2);
     }
@@ -30,9 +34,9 @@ public class Decoder {
     }
 
     private Operation arithmeticInstruction(String instruction, String[] Registers){
-        System.out.println("Arithmetic Instruction");
+//        System.out.println("Arithmetic Instruction");
         String OPCODE = binToHexidecimal(instruction.substring(2,8));
-        System.out.println("OPCODE: " + OPCODE);
+//        System.out.println("OPCODE: " + OPCODE);
         String stringSReg = binToDecimal(instruction.substring(8,12));
         int SRegIndex = Integer.parseInt(stringSReg);
         String stringSReg2 = binToDecimal(instruction.substring(12,16));
@@ -40,6 +44,7 @@ public class Decoder {
         String stringDReg = binToDecimal(instruction.substring(16,20));
         int DRegIndex = Integer.parseInt(stringDReg);
 
+/*
         if(OPCODE.equals("4")){
             System.out.println("Assignment");
 //            DReg = SReg;
@@ -73,7 +78,7 @@ public class Decoder {
         }
         else{ //OPCODE is 0A
             System.out.println("Logical OR of two SRegs");
-        }
+        }*/
 
         return Operation.builder()
                 .type(Operation.Type.MATH)
@@ -84,7 +89,7 @@ public class Decoder {
                 .build();
     }
     private Operation branchInstruction(String instruction, String[] Registers){
-        System.out.println("---Branch Instruction---");
+//        System.out.println("---Branch Instruction---");
         String OPCODE = instruction.substring(2,8);
         String BReg = instruction.substring(8,12);
         String DReg = instruction.substring(12,16);
@@ -98,10 +103,10 @@ public class Decoder {
                 .build();
     }
     private Operation jumpInstruction(String instruction, String[] Registers){
-        System.out.println("---Jump Instruction---");
+//        System.out.println("---Jump Instruction---");
         String OPCODE = binToHexidecimal(instruction.substring(2,8));
         String Address = instruction.substring(8,32);
-        System.out.println("Jump to specified address.");
+//        System.out.println("Jump to specified address.");
         return Operation.builder()
                 .type(Operation.Type.UNCONDITIONAL_JUMP)
                 .opCode(OPCODE)
@@ -109,9 +114,9 @@ public class Decoder {
                 .build();
     }
     private Operation inputOutputInstruction(String instruction, String[] Registers, String inputBuffer, String outputBuffer){
-        System.out.println("---Input/Output Instruction---");
+//        System.out.println("---Input/Output Instruction---");
         String OPCODE = binToHexidecimal(instruction.substring(2,8));
-        System.out.println("OPCODE: " + OPCODE);
+//        System.out.println("OPCODE: " + OPCODE);
         String stringSReg = binToDecimal(instruction.substring(8,12));
         int SRegIndex = Integer.parseInt(stringSReg);
         String stringSReg2 = binToDecimal(instruction.substring(12,16));
@@ -119,10 +124,10 @@ public class Decoder {
         String Address = instruction.substring(16,32);
 
         if(OPCODE.equals("0")){
-            System.out.println("Read content of I/P buffer into an accumulator");
+//            System.out.println("Read content of I/P buffer into an accumulator");
         }
         else{ //OPCODE is 1
-            System.out.println("Writes content of accumulator into O/P buffer");
+//            System.out.println("Writes content of accumulator into O/P buffer");
         }
         return Operation.builder()
                 .type(Operation.Type.IO_INSTRUCTION)
@@ -134,6 +139,7 @@ public class Decoder {
     }
 
     public Operation run(String hexInstruction) {
+//        System.out.println("RUN: " + hexInstruction);
         //Buffers
         String inputBuffer = "Null";
         String outputBuffer = "Null";
@@ -143,18 +149,18 @@ public class Decoder {
         //String instruction = args;
 //        String hexInstruction = "0x00000045".substring(2,10); //0xC10000C0                                              //SOMETHING ISN'T RIGHT WITH 0x00000045
         String instruction = hexToBinary(hexInstruction.substring(2));
-        System.out.println(instruction);
+//        System.out.println(instruction);
 
         //Leading Zeros Fix
         if(instruction.length() != 32){
             int missingZeros = 32 - instruction.length();
-            System.out.println(missingZeros);
+//            System.out.println(missingZeros);
             String fixedInstruction = "";
             for (int i = 0; i < missingZeros; i++) {
                 fixedInstruction = fixedInstruction.concat("0");
             }
             instruction = fixedInstruction + instruction;
-            System.out.println(instruction);
+//            System.out.println(instruction);
         }
 
         //VISUALIZATION - TO BE DELETED

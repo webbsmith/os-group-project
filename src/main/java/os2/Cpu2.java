@@ -18,6 +18,7 @@ public class Cpu2 {
 
     private boolean busControl = true;
     private int programCounter = -1;
+    private int endOfProgram;
     private int activeProcess;
 
     boolean active = false;
@@ -25,8 +26,9 @@ public class Cpu2 {
 
     public int compute(Program program) {
         active = true;
-        while (!interrupted) {
-            programCounter = program.getProgramCounter();
+        programCounter = program.getProgramCounter();
+        endOfProgram = programCounter + decoder.hexToDecimal(program.getInstructionCount());
+        while (!interrupted && programCounter < endOfProgram) {
             String instruction = disk.getWord(programCounter);
             log.debug("instruction: {}", instruction);
 
