@@ -3,6 +3,9 @@ package os;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /* This class simulates the process control block.
    For any given job (Job 1, Job 2, etc), the data about that
    job's length would be stored at (Job # - 1) position in the jobLength array.
@@ -47,6 +50,7 @@ public class ProcessControlBlock {
 
     // don't know if any of this is needed, it's just from his example
     private State state;
+    private List<Integer> registers = new ArrayList<>();
     private int codeSize;
     private int schedule;
     private int accounts;
@@ -157,5 +161,13 @@ public class ProcessControlBlock {
     public void setOutputBufferLocation(int x, int temp) {
         log.trace("setOutputBufferLocation(x={}, temp={})", x, temp);
         jobOutputBufferLocation[x - 1] = temp;
+    }
+
+    public List<Integer> getRegisters() {
+        return registers;
+    }
+
+    public int getAccumulatorAddress() {
+        return getRegisters().get(0);
     }
 }

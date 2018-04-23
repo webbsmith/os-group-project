@@ -1,8 +1,13 @@
 package os;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@RequiredArgsConstructor
 public class Cpu {
     private static final Logger log = LoggerFactory.getLogger(Cpu.class);
 
@@ -10,16 +15,13 @@ public class Cpu {
     private final ProgramQueues programQueues;
     private final NewFetcher fetcher;
     private final Decoder decoder;
+    private final Memory memory;
+    private final ProcessControlBlock pcb;
 
     private boolean busControl = true;
     private int programCounter = -1;
-
-    public Cpu(ProgramQueues programQueues, CpuDmaController cpuDmaController, NewFetcher fetcher, Decoder decoder) {
-        this.cpuDmaController = cpuDmaController;
-        this.programQueues = programQueues;
-        this.fetcher = fetcher;
-        this.decoder = decoder;
-    }
+    private List<Integer> registerList = new ArrayList<>();
+    private int activeProcess;
 
     public void read(int memoryAddressOfPhysicalData, int memoryAddressOfBuffer) {
         log.debug("read(memoryAddressOfPhysicalData={}, memoryAddressOfBuffer={})", memoryAddressOfPhysicalData, memoryAddressOfBuffer);
@@ -51,8 +53,10 @@ public class Cpu {
     }
 
     private void executeOperation(Operation operation) {
+        log.info("Executing {}", operation);
         switch (operation.getOpCode()){
             case "00": // RD: Reads content of input buffer into an accumulator
+//                memory.getWord(pcb.getInputBufferLocation(activeProcess);
                 break;
             case "01": // WR: Writes content of accumulator into output buffer
                 break;
