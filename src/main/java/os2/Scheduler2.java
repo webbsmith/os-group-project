@@ -1,5 +1,6 @@
 package os2;
 
+import lombok.extern.slf4j.Slf4j;
 import os.Decoder;
 import os.Memory;
 import os.Program;
@@ -7,6 +8,7 @@ import os.Program;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public enum Scheduler2 {
     INSTANCE;
 
@@ -28,8 +30,15 @@ public enum Scheduler2 {
         for (Cpu2 cpu : cpus) {
             if (cpu.isActive()) continue;
             Program program = programQueues2.nextNew();
+            if (program == null) exit();
             program.setStatus("RUNNING");
             cpu.compute(program);
+            program.setStatus("TERMINATED");
         }
+    }
+
+    public void exit() {
+        log.info("All programs executed.");
+        System.exit(0);
     }
 }
