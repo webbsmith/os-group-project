@@ -13,6 +13,7 @@ public class Cpu2 {
 
     //    private final NewFetcher fetcher;
     private final Decoder decoder;
+    private final int cpuId;
 
     private final Disk2 disk = Disk2.INSTANCE;
 
@@ -22,7 +23,7 @@ public class Cpu2 {
     private int endOfProgram;
     private int activeProcess;
 
-    private boolean active = false;
+    private volatile boolean active = false;
     private boolean interrupted = false;
 
     public int compute(Program program) {
@@ -198,5 +199,7 @@ public class Cpu2 {
         return Integer.toBinaryString(decimal);
     }
 
-
+    public int getCpuId() {
+        return cpuId;
+    }
 }

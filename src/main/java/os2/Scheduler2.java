@@ -5,8 +5,8 @@ import os.Decoder;
 import os.Memory;
 import os.Program;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Deque;
+import java.util.LinkedList;
 
 @Slf4j
 public enum Scheduler2 {
@@ -15,11 +15,11 @@ public enum Scheduler2 {
     private final Memory memory = new Memory();
 
     private final ProgramQueues2 programQueues2 = ProgramQueues2.INSTANCE;
-    private final List<Cpu2> cpus = new ArrayList<>();
+    private final Deque<Cpu2> cpuQueue = new LinkedList<>();
 
     {
         for (int i = 0; i < Main.CPU_COUNT; i++)
-            cpus.add(new Cpu2(new Decoder()));
+            cpuQueue.add(new Cpu2(new Decoder(), i));
     }
 
     public void schedule(Program currentProgram) {
@@ -28,10 +28,13 @@ public enum Scheduler2 {
 
     public void next() {
         if (Thread.currentThread().isInterrupted()) return;
-        for (int i = 0; i < Main.CPU_COUNT; i++) {
+        while (!cpuQueue.isEmpty()) {
 
-            Cpu2 cpu = cpus.get(i);
-            if (cpu.isActive()) continue;
+            Cpu2 cpu = cpuQueue.poll();
+
+            if (cpu.isActive()) {
+                continue;
+            }
 
             Program program = programQueues2.nextNew();
             if (program == null) {
@@ -41,10 +44,13 @@ public enum Scheduler2 {
             }
 
             program.setStatus("RUNNING");
-            program.setCpuId(i);
-            cpu.compute(program);
+            program.setCpuId(cpu.getCpuId());
+            new Thread(() -> {
+                cpu.compute(program);
+                cpuQueue.add(cpu);
+                program.setStatus("TERMINATED");
+            }).start();
 
-            program.setStatus("TERMINATED");
         }
     }
 

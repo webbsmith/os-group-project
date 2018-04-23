@@ -24,9 +24,10 @@ import os.Decoder;
 public enum Disk2 {
     INSTANCE;
 
+    private static final int SIZE = 2048;
     private final Decoder decoder = new Decoder();
 
-    private String[] word = new String[2048];
+    private String[] word = new String[SIZE];
     private int counter = 0;
 
     {
@@ -40,7 +41,7 @@ public enum Disk2 {
     }
 
     public int newWord(String newword) {
-        if (counter < 2048) {
+        if (counter < SIZE) {
             word[counter] = newword;
             counter++;
         } else {
@@ -54,6 +55,9 @@ public enum Disk2 {
     }
 
     public String getWord(int x) {
+        if (x >= SIZE) {
+            x %= SIZE; // just a hack, todo find real problem
+        }
         return word[x];
     }
 

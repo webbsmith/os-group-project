@@ -4,12 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Main {
-    public static final int CPU_COUNT = 2;
+    public static final int CPU_COUNT = 1;
 
-    public static void main(String[] args) {
-        long time = System.currentTimeMillis();
+    public static void main(String[] args) throws InterruptedException {
+        long startTime = System.currentTimeMillis();
         Driver2 driver = new Driver2();
         driver.run();
-        log.info("Finished all programs in {} ms", (System.currentTimeMillis() - time));
+        long timeToComplete = System.currentTimeMillis() - startTime;
+        Thread.sleep(500); // Wait for all threads to finish
+        log.info("Finished all programs in {} ms", timeToComplete);
     }
 }
