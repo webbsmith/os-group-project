@@ -44,14 +44,15 @@ public class Cpu2 {
         log.info("Executing {}", operation);
         switch (operation.getOpCode()) {
             case "00": // RD: Reads content of input buffer into an accumulator
-                String data = disk.getWord(program.getInputBufferCounterAndIncrement());
+                String data = disk.getWord(program.getInputBufferCounterAndIncrement()).substring(2);
                 log.debug("data: {}", data);
-                program.storeData(data, decoder.hexToDecimal(operation.getSourceRegister1()));
-                log.info("program status: " + program);
+                program.storeData(decoder.hexToBinary(data), operation.getSourceRegister1());
                 break;
             case "01": // WR: Writes content of accumulator into output buffer
+                log.info("OUTPUT BUFFER: {}", program.getData(operation.getSourceRegister1()));
                 break;
             case "02": // ST: Stores register's content to an address
+                program.storeData(program.getData(operation.getDestinationRegister()), operation.getBranchRegister());
                 break;
             case "03": // LW: Loads content of an address into a register
                 break;
@@ -70,14 +71,18 @@ public class Cpu2 {
             case "0A": // OR: Logical OR of two S-regs into D-reg
                 break;
             case "0B": // MOVI: Transfers address/data directly into a register
+                program.storeData(operation.getAddressOrData(), operation.getDestinationRegister());
                 break;
             case "0C": // ADDI: Adds a data value directly to the content of a register
+                int sum = binaryToDecimal(operation.getAddressOrData()) + binaryToDecimal(program.getData(operation.getDestinationRegister()));
+                program.storeData(decimalToBinary(sum), operation.getDestinationRegister());
                 break;
             case "0D": // MULI: Multiplies a data value directly with the content of a register
                 break;
             case "0E": // DIVI: Divides a data directly to the content of a register
                 break;
             case "0F": // LDI: Loads data/address directly to the content of a register
+                program.storeData(operation.getAddressOrData(), operation.getDestinationRegister());
                 break;
             case "10": // SLT: Sets the D-reg to 1 if first S-reg is less than the B-reg; 0 otherwise
                 break;
@@ -102,6 +107,7 @@ public class Cpu2 {
             case "1A": // BLZ: Branches to an address when content of B-reg < 0
                 break;
         }
+        log.info("program status: " + program);
     }
 
     public void setProgramCounter(int programCounter) {
@@ -111,4 +117,13 @@ public class Cpu2 {
     public boolean isActive() {
         return active;
     }
+
+    private static int binaryToDecimal(String binary) {
+        return Integer.parseInt(binary, 2);
+    }
+
+    private static String decimalToBinary(int decimal) {
+        return Integer.toBinaryString(decimal);
+    }
+
 }

@@ -8,7 +8,7 @@ public class Decoder {
         return new BigInteger(hex, 16).intValue();
     }
 
-    private String hexToBinary(String hex){
+    public String hexToBinary(String hex) {
         return new BigInteger(hex, 16).toString(2);
     }
 
@@ -41,12 +41,12 @@ public class Decoder {
 //        System.out.println("Arithmetic Instruction");
         String OPCODE = binToHexidecimal(instruction.substring(2,8));
 //        System.out.println("OPCODE: " + OPCODE);
-        String stringSReg = binToDecimal(instruction.substring(8,12));
-        int SRegIndex = Integer.parseInt(stringSReg);
-        String stringSReg2 = binToDecimal(instruction.substring(12,16));
-        int SReg2Index = Integer.parseInt(stringSReg2);
-        String stringDReg = binToDecimal(instruction.substring(16,20));
-        int DRegIndex = Integer.parseInt(stringDReg);
+        String stringSReg = instruction.substring(8, 12);
+//        int SRegIndex = Integer.parseInt(stringSReg);
+        String stringSReg2 = instruction.substring(12, 16);
+//        int SReg2Index = Integer.parseInt(stringSReg2);
+        String stringDReg = instruction.substring(16, 20);
+//        int DRegIndex = Integer.parseInt(stringDReg);
 
 /*
         if(OPCODE.equals("4")){
@@ -121,10 +121,10 @@ public class Decoder {
 //        System.out.println("---Input/Output Instruction---");
         String OPCODE = binToHexidecimal(instruction.substring(2,8));
 //        System.out.println("OPCODE: " + OPCODE);
-        String stringSReg = binToDecimal(instruction.substring(8,12));
-        int SRegIndex = Integer.parseInt(stringSReg);
-        String stringSReg2 = binToDecimal(instruction.substring(12,16));
-        int SReg2Index = Integer.parseInt(stringSReg2);
+        String stringSReg = instruction.substring(8, 12);
+//        int SRegIndex = Integer.parseInt(stringSReg);
+        String stringSReg2 = instruction.substring(12, 16);
+//        int SReg2Index = Integer.parseInt(stringSReg2);
         String Address = instruction.substring(16,32);
 
         if(OPCODE.equals("0")){

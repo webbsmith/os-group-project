@@ -31,14 +31,26 @@ public class Program {
     }
 
     public void storeData(String data, int registerNumber) {
-        registers[registerNumber - 1] = data;
+        registers[registerNumber] = data;
+    }
+
+    public void storeData(String data, String registerNumberInBinary) {
+        registers[binaryToDecimal(registerNumberInBinary)] = data;
     }
 
     public String getData(int registerNumber) {
-        return registers[registerNumber - 1];
+        return registers[registerNumber];
+    }
+
+    public String getData(String registerNumberInBinary) {
+        return registers[binaryToDecimal(registerNumberInBinary)];
     }
 
     public void setStatus(String s) {
         status = s;
+    }
+
+    private static int binaryToDecimal(String binary) {
+        return Integer.parseInt(binary, 2);
     }
 }

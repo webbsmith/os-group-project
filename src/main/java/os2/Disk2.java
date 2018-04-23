@@ -19,8 +19,12 @@ This disk class does not have the control cards from the program file (ex. '// J
 There will be a PCB class that stores that information.
 */
 
+import os.Decoder;
+
 public enum Disk2 {
     INSTANCE;
+
+    private final Decoder decoder = new Decoder();
 
     private String[] word = new String[2048];
     private int counter = 0;
@@ -39,7 +43,13 @@ public enum Disk2 {
         return counter;
     }
 
+    public void storeDataAt(String data, int index) {
+        word[index] = data;
+    }
+
     public String getWord(int x) {
         return word[x];
     }
+
+
 }
