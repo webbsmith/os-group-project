@@ -20,6 +20,13 @@ public class Program {
 
     private List<String> registers = new ArrayList<>();
 
+    {
+        // initialize 20 registers
+        for (int i = 0; i < 20; i++) {
+            registers.add("empty");
+        }
+    }
+
     private String status;
 
     public int getInputBufferCounterAndIncrement() {

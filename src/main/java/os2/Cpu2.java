@@ -21,8 +21,8 @@ public class Cpu2 {
     private int endOfProgram;
     private int activeProcess;
 
-    boolean active = false;
-    boolean interrupted = false;
+    private boolean active = false;
+    private boolean interrupted = false;
 
     public int compute(Program program) {
         active = true;
@@ -46,9 +46,8 @@ public class Cpu2 {
             case "00": // RD: Reads content of input buffer into an accumulator
                 String data = disk.getWord(program.getInputBufferCounterAndIncrement());
                 log.debug("data: {}", data);
-
                 program.storeInAccumulator(data);
-
+                log.info("program status: " + program);
                 break;
             case "01": // WR: Writes content of accumulator into output buffer
                 break;

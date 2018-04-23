@@ -13,7 +13,11 @@ public class Decoder {
     }
 
     private String binToHexidecimal(String bin){
-        return new BigInteger(bin, 2).toString(16);
+        String s = new BigInteger(bin, 2).toString(16);
+        if (s.length() == 1) {
+            return "0" + s;
+        }
+        return s;
     }
 
     private String binToDecimal(String bin){
@@ -90,7 +94,7 @@ public class Decoder {
     }
     private Operation branchInstruction(String instruction, String[] Registers){
 //        System.out.println("---Branch Instruction---");
-        String OPCODE = instruction.substring(2,8);
+        String OPCODE = binToHexidecimal(instruction.substring(2, 8));
         String BReg = instruction.substring(8,12);
         String DReg = instruction.substring(12,16);
         String Address = instruction.substring(16,32);
