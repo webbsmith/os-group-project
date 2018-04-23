@@ -15,7 +15,8 @@ public enum Scheduler2 {
 
     private final Memory memory = new Memory();
 
-    private final ProgramQueuesFifo programQueues = ProgramQueuesFifo.INSTANCE; // Swap for ProgramQueuesFifo for FIFO scheduling
+//    private final ProgramQueuesFifo programQueues = ProgramQueuesFifo.INSTANCE; // Swap for ProgramQueuesFifo for FIFO scheduling
+    private final ProgramQueuesTreeSet programQueues = ProgramQueuesTreeSet.INSTANCE; // Swap for ProgramQueuesFifo for FIFO scheduling
     private final Deque<Cpu2> cpuQueue = new LinkedList<>();
 
     private volatile boolean stillWorking = true;
@@ -58,7 +59,7 @@ public enum Scheduler2 {
                 cpu.compute(program);
                 cpuQueue.add(cpu);
                 program.setStatus("TERMINATED");
-                log.info("Program stats: {}", program.stats());
+                log.info("Program stats: {}", program.statsCsv());
                 activePrograms.decrementAndGet();
             }).start();
 
