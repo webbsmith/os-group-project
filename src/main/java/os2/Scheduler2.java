@@ -26,7 +26,7 @@ public enum Scheduler2 {
     }
 
     public void next() {
-        for (int i = 0; i < cpus.size(); i++) {
+        for (int i = Main.CPU_COUNT; i < cpus.size(); i++) {
             Cpu2 cpu = cpus.get(i);
             if (cpu.isActive()) continue;
 
