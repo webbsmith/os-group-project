@@ -15,6 +15,12 @@ public class Program implements Comparable<Program> {
     private int programCounter;
     private int inputBufferCounter;
     private int cpuId;
+
+    private long initializationTime = System.currentTimeMillis();
+    private long executionStartTime;
+    private long completionTime;
+    private int ioOperationCount = 0;
+
     private String[] registers = new String[20];
 
     {
@@ -57,5 +63,16 @@ public class Program implements Comparable<Program> {
     @Override
     public int compareTo(Program o) {
         return -Integer.compare(Integer.parseInt(this.priorityNumber, 16), Integer.parseInt(o.priorityNumber, 16));
+    }
+
+    public String stats() {
+        return "id: " + id + ';' +
+                " time_waiting: " + (executionStartTime - initializationTime) + ';' +
+                " time_running: " + (completionTime - executionStartTime) +
+                " io_operations: " + ioOperationCount;
+    }
+
+    public void incrementIoOperations() {
+        ioOperationCount++;
     }
 }

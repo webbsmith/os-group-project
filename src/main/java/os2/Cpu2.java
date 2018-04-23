@@ -27,37 +27,41 @@ public class Cpu2 {
     private boolean interrupted = false;
 
     public int compute(Program program) {
+        program.setExecutionStartTime(System.currentTimeMillis());
         active = true;
         interrupted = false;
         setProgramCounter(program.getProgramCounter());
         endOfProgram = program.getProgramCounter() + decoder.hexToDecimal(program.getInstructionCount());
         while (!interrupted && programCounter < endOfProgram) {
             String instruction = disk.getWord(programCounter);
-            log.debug("instruction: {}", instruction);
+//            log.debug("instruction: {}", instruction);
 
             Operation operation = decoder.run(instruction);
             incrementCounter();
             executeOperation(operation, program);
         }
         active = false;
+        program.setCompletionTime(System.currentTimeMillis());
         return 0;
     }
 
 
     private void executeOperation(Operation operation, Program program) {
-        log.info("Executing {}", operation);
+//        log.info("Executing {}", operation);
         switch (operation.getOpCode()) {
             case "00": // RD: Reads content of input buffer into an accumulator
+                program.incrementIoOperations();
                 String data;
                 if (operation.getSourceRegister2().equals("0000")) {
                     data = decoder.hexToBinary(disk.getWord(program.getInputBufferCounterAndIncrement()).substring(2));
                 } else {
                     data = program.getData(operation.getSourceRegister2());
                 }
-                log.debug("data: {}", data);
+//                log.debug("data: {}", data);
                 program.storeData(data, operation.getSourceRegister1());
                 break;
             case "01": // WR: Writes content of accumulator into output buffer
+                program.incrementIoOperations();
                 writeToOutput(program.getData(operation.getSourceRegister1()));
                 break;
             case "02": // ST: Stores register's content to an address
@@ -126,14 +130,14 @@ public class Cpu2 {
                 program.storeData(oneOrZeroSltI, operation.getDestinationRegister());
                 break;
             case "12": // HLT: Logical end of program
-                log.info("HLT: End of program");
+//                log.info("HLT: End of program");
                 break;
             case "13": // NOP: Does nothing and moves to next instruction
-                log.info("NOP: Doing nothing and moving to next instruction");
+//                log.info("NOP: Doing nothing and moving to next instruction");
                 break;
             case "14": // JMP: Jumps to a specified location
                 programCounter = binaryToDecimal(operation.getAddressOrData()) / 4;
-                log.info("JMP: Jumping to {}", programCounter);
+//                log.info("JMP: Jumping to {}", programCounter);
                 break;
             case "15": // BEQ: Branches to an address when content of B-reg = D-reg
                 if (binaryToDecimal(program.getData(operation.getBranchRegister())) == binaryToDecimal(program.getData(operation.getDestinationRegister()))) {
@@ -166,11 +170,11 @@ public class Cpu2 {
                 }
                 break;
         }
-        log.info("program status: " + program);
+//        log.info("program status: " + program);
     }
 
     private void writeToOutput(String data) {
-        log.info("OUTPUT BUFFER: {}", data);
+//        log.info("OUTPUT BUFFER: {}", data);
     }
 
     public void setProgramCounter(int programCounter) {
@@ -182,7 +186,7 @@ public class Cpu2 {
         programCounter++;
         operationCount++;
         if (operationCount >= 300) {
-            log.warn("CPU performed 300 operations for the current program. There may be something wrong.");
+//            log.warn("CPU performed 300 operations for the current program. There may be something wrong.");
             interrupted = true;
         }
     }
