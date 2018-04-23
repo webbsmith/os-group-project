@@ -44,7 +44,12 @@ public class Cpu2 {
         log.info("Executing {}", operation);
         switch (operation.getOpCode()) {
             case "00": // RD: Reads content of input buffer into an accumulator
-                String data = disk.getWord(program.getInputBufferCounterAndIncrement()).substring(2);
+                String data;
+                if (operation.getSourceRegister2().equals("0000")) {
+                    data = disk.getWord(program.getInputBufferCounterAndIncrement()).substring(2);
+                } else {
+                    data = program.getData(program.getData(operation.getSourceRegister2()));
+                }
                 log.debug("data: {}", data);
                 program.storeData(decoder.hexToBinary(data), operation.getSourceRegister1());
                 break;
@@ -84,7 +89,12 @@ public class Cpu2 {
             case "0F": // LDI: Loads data/address directly to the content of a register
                 program.storeData(operation.getAddressOrData(), operation.getDestinationRegister());
                 break;
-            case "10": // SLT: Sets the D-reg to 1 if first S-reg is less than the B-reg; 0 otherwise
+            case "10": // SLT: Sets the D-reg to 1 if first S-reg is less than the second S-reg; 0 otherwise (Bobbie's notes say B-reg instead of second S-reg)
+                String oneOrZero = "0";
+                if (binaryToDecimal(operation.getSourceRegister1()) < binaryToDecimal(operation.getSourceRegister2())) {
+                    oneOrZero = "1";
+                }
+                program.storeData(oneOrZero, operation.getDestinationRegister());
                 break;
             case "11": // SLTI: Sets the D-reg to 1 if first S-reg is less than a data; 0 otherwise
                 break;
@@ -97,6 +107,9 @@ public class Cpu2 {
             case "15": // BEQ: Branches to an address when content of B-reg = D-reg
                 break;
             case "16": // BNE: Branches to an address when content of B-reg <> D-reg
+                if (!operation.getBranchRegister().equals(operation.getDestinationRegister())) {
+                    programCounter = binaryToDecimal(operation.getAddressOrData()) / 4;
+                }
                 break;
             case "17": // BEZ: Branches to an address when content of B-reg = 0
                 break;
