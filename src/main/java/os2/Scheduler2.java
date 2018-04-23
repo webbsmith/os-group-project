@@ -15,7 +15,7 @@ public enum Scheduler2 {
 
     private final Memory memory = new Memory();
 
-    private final ProgramQueuesPriority programQueues = ProgramQueuesPriority.INSTANCE; // Swap for ProgramQueues2 for FIFO scheduling
+    private final ProgramQueues2 programQueues = ProgramQueues2.INSTANCE; // Swap for ProgramQueues2 for FIFO scheduling
     private final Deque<Cpu2> cpuQueue = new LinkedList<>();
 
     private volatile AtomicInteger activePrograms = new AtomicInteger(0);
