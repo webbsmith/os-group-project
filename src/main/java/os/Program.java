@@ -75,6 +75,10 @@ public class Program implements Comparable<Program> {
                 " memory_percentage: " + (parseInt(inputBufferSize) + ioOperationCount) / 1024.0 * 100;
     }
 
+    public String statsCsv() {
+        return stats().replaceAll("[a-z_ ;:]+", ",");
+    }
+
     public void incrementIoOperations() {
         ioOperationCount++;
     }
