@@ -5,7 +5,7 @@ import os.Program;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-public enum ProgramQueues2 {
+public enum ProgramQueuesFifo {
     INSTANCE;
 
     private final Queue<Program> newQueue = new ArrayDeque<Program>();
