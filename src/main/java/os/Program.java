@@ -2,6 +2,8 @@ package os;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class Program {
     // All of these are in hex
@@ -11,4 +13,9 @@ public class Program {
     private String inputBufferSize;
     private String outputBufferSize;
     private String temporaryBufferSize;
+    // End hex vars
+    private int programCounter;
+    private int inputBufferCounter;
+
+    private List<Integer> registers;
 }

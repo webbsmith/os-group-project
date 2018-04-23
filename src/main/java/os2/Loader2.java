@@ -1,18 +1,16 @@
 package os2;
 
 import lombok.extern.slf4j.Slf4j;
-import os.Disk;
 import os.Program;
-import os.ProgramQueues;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 @Slf4j
-public class Cpu2 {
-    private final ProgramQueues programQueues = new ProgramQueues();
-    private final Disk disk = new Disk();
+public class Loader2 {
+    private final Scheduler2 scheduler2 = Scheduler2.INSTANCE;
+    private final Disk2 disk = Disk2.INSTANCE;
 
     private void load(String fileName) {
         log.info("Reading input file {}", fileName);
@@ -29,34 +27,43 @@ public class Cpu2 {
             if (line.contains("END")) {
                 schedule(currentProgram);
                 currentProgram = new Program();
-                return;
+                continue;
             }
             if (line.contains("JOB")) {
-                String[] lineSplit = line.split(" ");
-                currentProgram.setId(lineSplit[2]);
-                currentProgram.setInstructionCount(lineSplit[2]);
-                currentProgram.setPriorityNumber(lineSplit[3]);
-                currentProgram.setProgramCounter(disk.getNextAddress());
-                return;
+                setJobAttributes(currentProgram, line);
+                continue;
             }
             if (line.contains("DATA")) {
-                String[] lineSplit = line.split(" ");
-                currentProgram.setInputBufferSize(lineSplit[2]);
-                currentProgram.setOutputBufferSize(lineSplit[3]);
-                currentProgram.setTemporaryBufferSize(lineSplit[4]);
-                return;
+                setDataAttributes(currentProgram, line);
+                continue;
             }
             if (!line.startsWith("0x")) {
                 throw new IllegalArgumentException("Invalid input: " + line);
             }
-            if (currentProgram.)
-                log.trace("{} >> sending to Disk", line);
-                disk.newWord(line);
-            }
+            log.trace("{} >> sending to Disk", line);
+            disk.newWord(line);
         }
+    }
+
+    private void setDataAttributes(Program currentProgram, String line) {
+        String[] lineSplit = line.split(" ");
+        currentProgram.setInputBufferSize(lineSplit[2]);
+        currentProgram.setOutputBufferSize(lineSplit[3]);
+        currentProgram.setTemporaryBufferSize(lineSplit[4]);
+        currentProgram.setInputBufferCounter(disk.getNextAddress());
+    }
+
+    private void setJobAttributes(Program currentProgram, String line) {
+        String[] lineSplit = line.split(" ");
+        currentProgram.setId(lineSplit[2]);
+        currentProgram.setInstructionCount(lineSplit[2]);
+        currentProgram.setPriorityNumber(lineSplit[3]);
+        currentProgram.setProgramCounter(disk.getNextAddress());
+    }
 
     private void schedule(Program currentProgram) {
-        programQueues.addToNew(currentProgram);
+        log.info("sending program to scheduler: {}", currentProgram);
+        scheduler2.schedule(currentProgram);
     }
 
     private Scanner getScanner(File file) {
