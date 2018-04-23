@@ -2,6 +2,7 @@ package os;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -17,5 +18,13 @@ public class Program {
     private int programCounter;
     private int inputBufferCounter;
 
-    private List<Integer> registers;
+    private List<String> registers = new ArrayList<>();
+
+    public int getInputBufferCounterAndIncrement() {
+        return inputBufferCounter++;
+    }
+
+    public void storeInAccumulator(String data) {
+        registers.add(0, data);
+    }
 }
