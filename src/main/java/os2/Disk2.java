@@ -31,7 +31,7 @@ public enum Disk2 {
 
     {
         for (int i = 0; i < word.length; i++) {
-            word[i] = "0"; // initialize values to 0
+            word[i] = "0x0"; // initialize values to 0
         }
     }
 
