@@ -8,7 +8,7 @@ public class Driver2 {
 
     private static final Logger log = LoggerFactory.getLogger(Driver2.class);
 
-    private final Loader loader;
+    private final Loader2 loader;
     private final Scheduler2 scheduler;
     private final Dispatcher dispatcher;
     private final Cpu cpu;
@@ -20,21 +20,21 @@ public class Driver2 {
         ProcessControlBlock pcb = new ProcessControlBlock();
         this.cpu = new Cpu(new CpuDmaController(), programQueues, new NewFetcher(new EffectiveAddress(0), new Memory()), new Decoder(), memory, pcb);
         Disk disk = new Disk();
-        this.loader = new Loader(disk, pcb);
+        this.loader = new Loader2();
         this.dispatcher = new Dispatcher(pcb, cpu);
         this.scheduler = Scheduler2.INSTANCE;
     }
 
     public void run() {
         log.info("Running loader");
-        loader.run("program-input.txt");
+        loader.load("program-input.txt");
         while (true) {
             log.info("Running scheduler");
             scheduler.next();
             log.info("Running dispatcher");
-            dispatcher.run();
+//            dispatcher.run();
             log.info("Running CPU");
-            cpu.run();
+//            cpu.run();
             waitForInterrupt();
         }
     }

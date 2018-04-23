@@ -12,7 +12,7 @@ public class Loader2 {
     private final Scheduler2 scheduler2 = Scheduler2.INSTANCE;
     private final Disk2 disk = Disk2.INSTANCE;
 
-    private void load(String fileName) {
+    public void load(String fileName) {
         log.info("Reading input file {}", fileName);
         File file = new File(getFileFromResourcesFolder(fileName));
         try (Scanner scan = getScanner(file)) {
@@ -37,7 +37,7 @@ public class Loader2 {
                 setDataAttributes(currentProgram, line);
                 continue;
             }
-            if (!line.startsWith("0x")) {
+            if (!line.startsWith("0X")) {
                 throw new IllegalArgumentException("Invalid input: " + line);
             }
             log.trace("{} >> sending to Disk", line);
