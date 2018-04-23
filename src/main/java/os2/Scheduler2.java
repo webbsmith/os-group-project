@@ -28,6 +28,7 @@ public enum Scheduler2 {
         for (Cpu2 cpu : cpus) {
             if (cpu.isActive()) continue;
             Program program = programQueues2.nextNew();
+            program.setStatus("RUNNING");
             cpu.compute(program);
         }
     }

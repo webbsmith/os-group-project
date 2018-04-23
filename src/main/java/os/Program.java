@@ -2,9 +2,6 @@ package os;
 
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 public class Program {
     // All of these are in hex
@@ -18,12 +15,12 @@ public class Program {
     private int programCounter;
     private int inputBufferCounter;
 
-    private List<String> registers = new ArrayList<>();
+    private String[] registers = new String[20];
 
     {
         // initialize 20 registers
         for (int i = 0; i < 20; i++) {
-            registers.add("empty");
+            registers[i] = "empty";
         }
     }
 
@@ -33,8 +30,12 @@ public class Program {
         return inputBufferCounter++;
     }
 
-    public void storeInAccumulator(String data) {
-        registers.add(0, data);
+    public void storeData(String data, int registerNumber) {
+        registers[registerNumber - 1] = data;
+    }
+
+    public String getData(int registerNumber) {
+        return registers[registerNumber - 1];
     }
 
     public void setStatus(String s) {

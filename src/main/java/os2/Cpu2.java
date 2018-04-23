@@ -46,7 +46,7 @@ public class Cpu2 {
             case "00": // RD: Reads content of input buffer into an accumulator
                 String data = disk.getWord(program.getInputBufferCounterAndIncrement());
                 log.debug("data: {}", data);
-                program.storeInAccumulator(data);
+                program.storeData(data, decoder.hexToDecimal(operation.getSourceRegister1()));
                 log.info("program status: " + program);
                 break;
             case "01": // WR: Writes content of accumulator into output buffer
