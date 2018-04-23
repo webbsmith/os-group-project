@@ -20,7 +20,7 @@ public class Program {
     {
         // initialize 20 registers
         for (int i = 0; i < 20; i++) {
-            registers[i] = "empty";
+            registers[i] = "0";
         }
     }
 

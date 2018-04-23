@@ -29,6 +29,12 @@ public enum Disk2 {
     private String[] word = new String[2048];
     private int counter = 0;
 
+    {
+        for (int i = 0; i < word.length; i++) {
+            word[i] = "0"; // initialize values to 0
+        }
+    }
+
     public int getNextAddress() {
         return counter;
     }

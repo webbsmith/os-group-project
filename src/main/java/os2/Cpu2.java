@@ -18,6 +18,7 @@ public class Cpu2 {
 
     private boolean busControl = true;
     private int programCounter = -1;
+    private int operationCount = 0;
     private int endOfProgram;
     private int activeProcess;
 
@@ -26,19 +27,21 @@ public class Cpu2 {
 
     public int compute(Program program) {
         active = true;
+        interrupted = false;
         setProgramCounter(program.getProgramCounter());
-        endOfProgram = programCounter + decoder.hexToDecimal(program.getInstructionCount());
+        endOfProgram = program.getProgramCounter() + decoder.hexToDecimal(program.getInstructionCount());
         while (!interrupted && programCounter < endOfProgram) {
             String instruction = disk.getWord(programCounter);
             log.debug("instruction: {}", instruction);
 
             Operation operation = decoder.run(instruction);
-            programCounter++;
+            incrementCounter();
             executeOperation(operation, program);
         }
         active = false;
         return 0;
     }
+
 
     private void executeOperation(Operation operation, Program program) {
         log.info("Executing {}", operation);
@@ -171,6 +174,16 @@ public class Cpu2 {
 
     public void setProgramCounter(int programCounter) {
         this.programCounter = programCounter;
+        operationCount = 0;
+    }
+
+    private void incrementCounter() {
+        programCounter++;
+        operationCount++;
+        if (operationCount == 200) {
+            log.warn("CPU performed 200 operations for the current program. There may be something wrong.");
+            interrupted = true;
+        }
     }
 
     public boolean isActive() {
@@ -184,5 +197,6 @@ public class Cpu2 {
     private static String decimalToBinary(int decimal) {
         return Integer.toBinaryString(decimal);
     }
+
 
 }
