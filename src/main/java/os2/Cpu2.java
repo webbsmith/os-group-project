@@ -66,14 +66,20 @@ public class Cpu2 {
                 program.storeData(program.getData(operation.getSourceRegister1()), operation.getDestinationRegister());
                 break;
             case "05": // ADD: Adds content of two S-regs into D-reg
-                int sumOfAdd = binaryToDecimal(program.getData(operation.getSourceRegister1())) + binaryToDecimal(program.getData(operation.getSourceRegister2()));
-                program.storeData(decimalToBinary(sumOfAdd), operation.getDestinationRegister());
+                int sum = binaryToDecimal(program.getData(operation.getSourceRegister1())) + binaryToDecimal(program.getData(operation.getSourceRegister2()));
+                program.storeData(decimalToBinary(sum), operation.getDestinationRegister());
                 break;
             case "06": // SUB: Subtracts content of two S-regs into D-reg
+                int difference = binaryToDecimal(program.getData(operation.getSourceRegister1())) - binaryToDecimal(program.getData(operation.getSourceRegister2()));
+                program.storeData(decimalToBinary(difference), operation.getDestinationRegister());
                 break;
             case "07": // MUL: Multiplies content of two S-regs into D-reg
+                int product = binaryToDecimal(program.getData(operation.getSourceRegister1())) * binaryToDecimal(program.getData(operation.getSourceRegister2()));
+                program.storeData(decimalToBinary(product), operation.getDestinationRegister());
                 break;
             case "08": // DIV: Divides content of two S-regs into D-reg
+                int quotient = binaryToDecimal(program.getData(operation.getSourceRegister1())) / binaryToDecimal(program.getData(operation.getSourceRegister2()));
+                program.storeData(decimalToBinary(quotient), operation.getDestinationRegister());
                 break;
             case "09": // AND: Logical AND of two S-regs into D-reg
                 break;
@@ -83,12 +89,16 @@ public class Cpu2 {
                 program.storeData(operation.getAddressOrData(), operation.getDestinationRegister());
                 break;
             case "0C": // ADDI: Adds a data value directly to the content of a register
-                int sum = binaryToDecimal(operation.getAddressOrData()) + binaryToDecimal(program.getData(operation.getDestinationRegister()));
-                program.storeData(decimalToBinary(sum), operation.getDestinationRegister());
+                int sumOfAddI = binaryToDecimal(operation.getAddressOrData()) + binaryToDecimal(program.getData(operation.getDestinationRegister()));
+                program.storeData(decimalToBinary(sumOfAddI), operation.getDestinationRegister());
                 break;
             case "0D": // MULI: Multiplies a data value directly with the content of a register
+                int productOfMulI = binaryToDecimal(operation.getAddressOrData()) * binaryToDecimal(program.getData(operation.getDestinationRegister()));
+                program.storeData(decimalToBinary(productOfMulI), operation.getDestinationRegister());
                 break;
             case "0E": // DIVI: Divides a data directly to the content of a register
+                int quotientOfDivI = binaryToDecimal(operation.getAddressOrData()) / binaryToDecimal(program.getData(operation.getDestinationRegister()));
+                program.storeData(decimalToBinary(quotientOfDivI), operation.getDestinationRegister());
                 break;
             case "0F": // LDI: Loads data/address directly to the content of a register
                 program.storeData(operation.getAddressOrData(), operation.getDestinationRegister());
