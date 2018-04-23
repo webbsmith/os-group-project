@@ -29,22 +29,14 @@ public class Driver2 {
         log.info("Running loader");
         loader.load("program-input.txt");
         while (true) {
-            log.info("Running scheduler");
             scheduler.next();
-            waitForInterrupt();
+            checkForInterrupt();
         }
     }
 
-    private void waitForInterrupt() {
-        try {
-            Thread.sleep(10_000); // 10 seconds
-        } catch (InterruptedException e) {
-            System.out.println("Received interrupt");
-            System.exit(2);
-        }
+    private void checkForInterrupt() {
         if (Thread.interrupted()) {
-            System.out.println("Received interrupt");
-            System.exit(2);
+            throw new RuntimeException("Thread interrupted");
         }
     }
 

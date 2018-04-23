@@ -26,7 +26,7 @@ public class Cpu2 {
 
     public int compute(Program program) {
         active = true;
-        programCounter = program.getProgramCounter();
+        setProgramCounter(program.getProgramCounter());
         endOfProgram = programCounter + decoder.hexToDecimal(program.getInstructionCount());
         while (!interrupted && programCounter < endOfProgram) {
             String instruction = disk.getWord(programCounter);
