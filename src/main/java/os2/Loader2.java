@@ -56,8 +56,8 @@ public class Loader2 {
     private void setJobAttributes(Program currentProgram, String line) {
         String[] lineSplit = line.split(" ");
         currentProgram.setId(lineSplit[2]);
-        currentProgram.setInstructionCount(lineSplit[2]);
-        currentProgram.setPriorityNumber(lineSplit[3]);
+        currentProgram.setInstructionCount(lineSplit[3]);
+        currentProgram.setPriorityNumber(lineSplit[4]);
         currentProgram.setProgramCounter(disk.getNextAddress());
     }
 
