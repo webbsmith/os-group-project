@@ -14,7 +14,6 @@ public enum Scheduler2 {
 
     private final Memory memory = new Memory();
 
-
     private final ProgramQueues2 programQueues2 = ProgramQueues2.INSTANCE;
     private final List<Cpu2> cpus = new ArrayList<>();
 
@@ -27,12 +26,17 @@ public enum Scheduler2 {
     }
 
     public void next() {
-        for (Cpu2 cpu : cpus) {
+        for (int i = 0; i < cpus.size(); i++) {
+            Cpu2 cpu = cpus.get(i);
             if (cpu.isActive()) continue;
+
             Program program = programQueues2.nextNew();
             if (program == null) exit();
+
             program.setStatus("RUNNING");
+            program.setCpuId(i);
             cpu.compute(program);
+
             program.setStatus("TERMINATED");
         }
     }

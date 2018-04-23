@@ -14,7 +14,7 @@ public class Program {
     // End hex vars
     private int programCounter;
     private int inputBufferCounter;
-
+    private int cpuId;
     private String[] registers = new String[20];
 
     {
