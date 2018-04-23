@@ -7,6 +7,7 @@ import os.Program;
 
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 public enum Scheduler2 {
@@ -17,6 +18,7 @@ public enum Scheduler2 {
     private final ProgramQueues2 programQueues2 = ProgramQueues2.INSTANCE;
     private final Deque<Cpu2> cpuQueue = new LinkedList<>();
 
+    private volatile AtomicInteger activePrograms = new AtomicInteger(0);
     {
         for (int i = 0; i < Main.CPU_COUNT; i++)
             cpuQueue.add(new Cpu2(new Decoder(), i));
@@ -38,10 +40,15 @@ public enum Scheduler2 {
 
             Program program = programQueues2.nextNew();
             if (program == null) {
-                log.info("All programs executed");
-                Thread.currentThread().interrupt();
-                return;
+                log.info("All programs started");
+                if (activePrograms.get() == 0) {
+                    log.info("All programs finished");
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+                continue;
             }
+            activePrograms.incrementAndGet();
 
             program.setStatus("RUNNING");
             program.setCpuId(cpu.getCpuId());
@@ -49,6 +56,7 @@ public enum Scheduler2 {
                 cpu.compute(program);
                 cpuQueue.add(cpu);
                 program.setStatus("TERMINATED");
+                activePrograms.decrementAndGet();
             }).start();
 
         }
