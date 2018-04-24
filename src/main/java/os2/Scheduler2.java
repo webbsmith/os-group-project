@@ -20,6 +20,7 @@ public enum Scheduler2 {
     private final Deque<Cpu2> cpuQueue = new ConcurrentLinkedDeque<>();
 
     private volatile boolean stillWorking = true;
+    private volatile boolean allProgramsStarted = false;
 
     private volatile AtomicInteger activePrograms = new AtomicInteger(0);
     {
@@ -31,9 +32,10 @@ public enum Scheduler2 {
         programQueues.addToNew(currentProgram);
     }
 
-    public boolean next() {
+    public boolean dispatch() {
         if (Thread.currentThread().isInterrupted()) return false;
-        while (true) {
+        if (activePrograms.get() == 0 && allProgramsStarted) return false;
+        while (!cpuQueue.isEmpty() && !allProgramsStarted) {
             Cpu2 cpu = cpuQueue.poll();
 
             if (cpu == null || cpu.isActive()) {
@@ -43,12 +45,7 @@ public enum Scheduler2 {
             Program program = programQueues.nextNew();
             if (program == null) {
                 log.info("All programs started");
-                if (activePrograms.get() == 0) {
-                    log.info("All programs finished");
-                    Thread.currentThread().interrupt();
-                    stillWorking = false;
-                    return stillWorking;
-                }
+                allProgramsStarted = true;
                 continue;
             }
             activePrograms.incrementAndGet();
@@ -67,6 +64,7 @@ public enum Scheduler2 {
             }).start();
 
         }
+        return true;
     }
 
 }
