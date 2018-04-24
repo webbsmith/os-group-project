@@ -6,7 +6,7 @@ import os.Memory;
 import os.Program;
 
 import java.util.Deque;
-import java.util.LinkedList;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
@@ -17,7 +17,7 @@ public enum Scheduler2 {
 
 //    private final ProgramQueuesFifo programQueues = ProgramQueuesFifo.INSTANCE; // Swap for ProgramQueuesFifo for FIFO scheduling
     private final ProgramQueuesTreeSet programQueues = ProgramQueuesTreeSet.INSTANCE; // Swap for ProgramQueuesFifo for FIFO scheduling
-    private final Deque<Cpu2> cpuQueue = new LinkedList<>();
+    private final Deque<Cpu2> cpuQueue = new ConcurrentLinkedDeque<>();
 
     private volatile boolean stillWorking = true;
 
@@ -32,11 +32,11 @@ public enum Scheduler2 {
     }
 
     public boolean next() {
-        if (Thread.currentThread().isInterrupted()) return stillWorking;
-        while (!cpuQueue.isEmpty()) {
+        if (Thread.currentThread().isInterrupted()) return false;
+        while (true) {
             Cpu2 cpu = cpuQueue.poll();
 
-            if (cpu.isActive()) {
+            if (cpu == null || cpu.isActive()) {
                 continue;
             }
 
@@ -56,15 +56,17 @@ public enum Scheduler2 {
             program.setStatus("RUNNING");
             program.setCpuId(cpu.getCpuId());
             new Thread(() -> {
-                cpu.compute(program);
-                cpuQueue.add(cpu);
-                program.setStatus("TERMINATED");
-                log.info("Program stats: {}", program.statsCsv());
-                activePrograms.decrementAndGet();
+                try {
+                    cpu.compute(program);
+                } finally {
+                    cpuQueue.add(cpu);
+                    program.setStatus("TERMINATED");
+                    log.info("Program stats: {}", program.statsCsv());
+                    activePrograms.decrementAndGet();
+                }
             }).start();
 
         }
-        return true;
     }
 
 }

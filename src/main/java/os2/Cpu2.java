@@ -28,20 +28,23 @@ public class Cpu2 {
 
     public int compute(Program program) {
         program.setExecutionStartTime(System.currentTimeMillis());
-        active = true;
-        interrupted = false;
-        setProgramCounter(program.getProgramCounter());
-        endOfProgram = program.getProgramCounter() + decoder.hexToDecimal(program.getInstructionCount());
-        while (!interrupted && programCounter < endOfProgram) {
-            String instruction = disk.getWord(programCounter);
+        try {
+            active = true;
+            interrupted = false;
+            setProgramCounter(program.getProgramCounter());
+            endOfProgram = program.getProgramCounter() + decoder.hexToDecimal(program.getInstructionCount());
+            while (!interrupted && programCounter < endOfProgram) {
+                String instruction = disk.getWord(programCounter);
 //            log.debug("instruction: {}", instruction);
 
-            Operation operation = decoder.run(instruction);
-            incrementCounter();
-            executeOperation(operation, program);
+                Operation operation = decoder.run(instruction);
+                incrementCounter();
+                executeOperation(operation, program);
+            }
+        } finally {
+            active = false;
+            program.setCompletionTime(System.currentTimeMillis());
         }
-        active = false;
-        program.setCompletionTime(System.currentTimeMillis());
         return 0;
     }
 

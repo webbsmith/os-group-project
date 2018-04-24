@@ -31,6 +31,7 @@ public class Driver2 {
         log.info("Running loader");
         loader.load("program-input.txt");
         while (!interrupted() && isStillWorking()) {
+            log.info("Still working" + stillWorking);
             stillWorking = scheduler.next();
         }
     }
