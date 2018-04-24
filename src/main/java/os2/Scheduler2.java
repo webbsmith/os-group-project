@@ -58,7 +58,7 @@ public enum Scheduler2 {
                 } finally {
                     cpuQueue.add(cpu);
                     program.setStatus("TERMINATED");
-                    log.info("Program stats: {}", program.statsCsv());
+                    log.info("Program stats: {}", program.stats());
                     activePrograms.decrementAndGet();
                 }
             }).start();
